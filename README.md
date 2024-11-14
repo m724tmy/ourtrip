@@ -21,6 +21,8 @@
 | ----------- | ---------- | ------------------------------ |
 | user        | references | null: false, foreign_key: true |
 | description | string     | null: false                    |
+| start_time  | datetime   |                                |
+| end_time    | datetime   |                                |
 
 ### Association
 
