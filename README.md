@@ -19,8 +19,9 @@
 
 | Column      | Type       | Options                        |
 | ----------- | ---------- | ------------------------------ |
+| room_name   | string     | null: false                    |
 | user        | references | null: false, foreign_key: true |
-| description | string     | null: false                    |
+| description | string     |                                |
 | start_time  | datetime   |                                |
 | end_time    | datetime   |                                |
 
