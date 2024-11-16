@@ -46,30 +46,41 @@
 
 ## Schedules テーブル
 
-| Column      | Type       | Options                        |
-| ----------- | ---------- | ------------------------------ |
-| room        | references | null: false, foreign_key: true |
-| title       | string     | null: false                    |
-| description | string     |                                |
-| start_time  | datetime   |                                |
-| end_time    | datetime   |                                |
+| Column        | Type       | Options                        |
+| ------------- | ---------- | ------------------------------ |
+| room          | references | null: false, foreign_key: true |
+| user          | references | null: false, foreign_key: true |
+| title         | string     | null: false                    |
+| start_time    | datetime   |                                |
+| end_time      | datetime   |                                |
+| description   | string     |                                |
+| cost          | integer    |                                |
+| reference_url | string     |                                |
+| latitude      | decimal    | precision: 10, scale: 6        |
+| longitude     | decimal    | precision: 10, scale: 6        |
 
 ### Association
 
 - belongs_to :room
+- belongs_to :user
 - has_many :comments, as: :commentable
 - has_many :schedule_locations
 - has_many :locations, through: :schedule_locations
 
 ## Locations テーブル
 
-| Column      | Type       | Options                        |
-| ----------- | ---------- | ------------------------------ |
-| room        | references | null: false, foreign_key: true |
-| title       | string     | null: false                    |
-| description | string     |                                |
-| latitude    | decimal    | precision: 10, scale: 6        |
-| longitude   | decimal    | precision: 10, scale: 6        |
+| Column        | Type       | Options                        |
+| ------------- | ---------- | ------------------------------ |
+| room          | references | null: false, foreign_key: true |
+| user          | references | null: false, foreign_key: true |
+| title         | string     | null: false                    |
+| start_time    | datetime   |                                |
+| end_time      | datetime   |                                |
+| description   | string     |                                |
+| cost          | integer    |                                |
+| reference_url | string     |                                |
+| latitude      | decimal    | precision: 10, scale: 6        |
+| longitude     | decimal    | precision: 10, scale: 6        |
 
 ### Association
 
