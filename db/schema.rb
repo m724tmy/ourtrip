@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_15_174244) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_16_062806) do
   create_table "room_users", charset: "utf8", force: :cascade do |t|
     t.bigint "room_id", null: false
     t.bigint "user_id", null: false
@@ -29,6 +29,23 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_15_174244) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "schedules", charset: "utf8", force: :cascade do |t|
+    t.bigint "room_id", null: false
+    t.bigint "user_id", null: false
+    t.string "title", null: false
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string "description"
+    t.integer "cost"
+    t.string "reference_url"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_schedules_on_room_id"
+    t.index ["user_id"], name: "index_schedules_on_user_id"
+  end
+
   create_table "users", charset: "utf8", force: :cascade do |t|
     t.string "nickname", null: false
     t.string "email", default: "", null: false
@@ -44,4 +61,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_15_174244) do
 
   add_foreign_key "room_users", "rooms"
   add_foreign_key "room_users", "users"
+  add_foreign_key "schedules", "rooms"
+  add_foreign_key "schedules", "users"
 end
