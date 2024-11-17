@@ -1,0 +1,28 @@
+<h1><%= @room.room_name %></h1>
+
+<div class="room-content">
+  <!-- 左側: しおり一覧 -->
+  <div class="schedules">
+    <h2>しおり</h2>
+
+        <p>タイトル: <%= @room.room_name %></p>
+        <p>説明: <%= @room.description %></p>
+        <p>開始日時: <%= @room.start_time %></p>
+        <p>終了日時: <%= @room.end_time %></p>
+
+    <% @schedules.each do |schedule| %>
+      <div class="schedule">
+        <p>タイトル: <%= schedule.title %></p>
+        <p>説明: <%= schedule.description %></p>
+        <p>開始日時: <%= schedule.start_time %></p>
+        <p>終了日時: <%= schedule.end_time %></p>
+      </div>
+    <% end %>
+    <%= link_to "スケジュールを追加", new_room_schedule_path(@room) %>
+    <%= link_to "もどる", root_path %>
+    
+  </div>
+
+  <!-- 右側: 行きたい場所・候補一覧 -->
+
+</div>

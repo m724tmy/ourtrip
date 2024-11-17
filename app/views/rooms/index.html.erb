@@ -9,7 +9,7 @@
   <% current_user.rooms.each do |room| %>
     <div class="room">
       <div class="room-name">
-        <a href="#"><%= room.room_name %></a>
+        <%= link_to room.room_name, room_path(room) %>
       </div>
     </div>
   <% end %>
