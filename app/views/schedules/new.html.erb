@@ -1,0 +1,48 @@
+<h1>スケジュールを追加</h1>
+
+<%= form_with model: [@room, @schedule], local: true do |f| %>
+  <div class="form-group">
+    <%= f.label :title, "タイトル" %>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :start_time, "開始時間" %>
+    <%= f.datetime_select :start_time, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :end_time, "終了時間" %>
+    <%= f.datetime_select :end_time, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :description, "詳細" %>
+    <%= f.text_area :description, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :cost, "費用" %>
+    <%= f.number_field :cost, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :reference_url, "参考URL" %>
+    <%= f.text_field :reference_url, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :latitude, "緯度" %>
+    <%= f.number_field :latitude, step: 0.000001, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :longitude, "経度" %>
+    <%= f.number_field :longitude, step: 0.000001, class: "form-control" %>
+  </div>
+
+
+  <div class="actions">
+    <%= f.submit "スケジュールを追加", class: "btn btn-success" %>
+  </div>
+<% end %>

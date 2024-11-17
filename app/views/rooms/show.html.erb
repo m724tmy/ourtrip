@@ -10,15 +10,19 @@
         <p>開始日時: <%= @room.start_time %></p>
         <p>終了日時: <%= @room.end_time %></p>
 
-    <% @schedules.each do |schedule| %>
-      <div class="schedule">
-        <p>タイトル: <%= schedule.title %></p>
-        <p>説明: <%= schedule.description %></p>
-        <p>開始日時: <%= schedule.start_time %></p>
-        <p>終了日時: <%= schedule.end_time %></p>
-      </div>
-    <% end %>
-    <%= link_to "スケジュールを追加", new_room_schedule_path(@room) %>
+<h2>スケジュール一覧</h2>
+<ul>
+  <% @room.schedules.each do |schedule| %>
+    <li>
+      <strong><%= schedule.title %></strong><br>
+      <%= schedule.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= schedule.end_time.strftime("%Y-%m-%d %H:%M") %>
+      <p><%= schedule.description %></p>
+      <p>コスト: <%= schedule.cost %>円</p>
+    </li>
+  <% end %>
+</ul>
+
+    <%= link_to "スケジュールを追加", new_room_schedule_path(@room), class: "btn btn-primary" %>
     <%= link_to "もどる", root_path %>
     
   </div>
