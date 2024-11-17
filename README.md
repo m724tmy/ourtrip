@@ -12,6 +12,8 @@
 
 - has_many :room_users
 - has_many :rooms, through: :room_users
+- has_many :schedules
+- has_many :locations
 - has_many :ratings
 - has_many :comments
 
@@ -29,7 +31,7 @@
 
 - has_many :room_users
 - has_many :users, through: :room_users
-- has_one :schedule
+- has_one :schedules
 - has_many :locations
 
 ## Room_user テーブル
@@ -86,6 +88,7 @@
 
 - has_many :comments, as: :commentable
 - belongs_to :room
+- belongs_to :user
 - has_many :tags, through: :location_tags
 - has_many :location_tags
 - has_many :schedule_locations
