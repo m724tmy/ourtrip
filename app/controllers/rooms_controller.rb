@@ -32,6 +32,23 @@ class RoomsController < ApplicationController
     redirect_to root_path
   end
 
+  def leave
+    @room = Room.find(params[:id])
+    room_user = RoomUser.find_by(user: current_user, room: @room)
+
+    if room_user
+      room_user.destroy
+      if @room.users.empty? # 参加者が0人になったら
+        @room.destroy
+        redirect_to rooms_path, notice: "ルームが削除されました"
+      else
+        redirect_to rooms_path, notice: "ルームを退出しました"
+      end
+    else
+      redirect_to rooms_path, alert: "ルーム退出に失敗しました"
+    end
+  end
+
   private
 
   def room_params
