@@ -22,6 +22,16 @@ class RoomsController < ApplicationController
     @locations = @room.locations
   end
 
+  def edit
+    @room = Room.find(params[:id])
+  end
+
+  def update
+    room = Room.find(params[:id])
+    room.update(room_params)
+    redirect_to root_path
+  end
+
   private
 
   def room_params
