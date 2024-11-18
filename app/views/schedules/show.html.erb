@@ -1,0 +1,20 @@
+<h1>スケジュール詳細</h1>
+
+<p><strong>タイトル:</strong> <%= @schedule.title %></p>
+<p><strong>開始時間:</strong> <%= @schedule.start_time.strftime('%Y-%m-%d %H:%M') %></p>
+<p><strong>終了時間:</strong> <%= @schedule.end_time.strftime('%Y-%m-%d %H:%M') %></p>
+<p><strong>説明:</strong> <%= @schedule.description %></p>
+<p><strong>コスト:</strong> <%= @schedule.cost %> 円</p>
+<p><strong>参照URL:</strong> 
+  <% if @schedule.reference_url.present? %>
+    <a href="<%= @schedule.reference_url %>" target="_blank">リンクを開く</a>
+  <% else %>
+    なし
+  <% end %>
+</p>
+
+<p><strong>緯度:</strong> <%= @schedule.latitude %></p>
+<p><strong>経度:</strong> <%= @schedule.longitude %></p>
+
+<%= link_to '編集する', edit_room_schedule_path(@room, @schedule), class: 'btn btn-primary' %>
+<%= link_to '戻る', room_path(@room), class: 'btn btn-secondary' %>

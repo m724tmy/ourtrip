@@ -5,7 +5,6 @@
   <!-- 左側: しおり一覧 -->
   <div class="schedules">
     <h2>Schedules</h2>
-
         <p>タイトル: <%= @room.room_name %></p>
         <p>説明: <%= @room.description %></p>
         <p>開始日時: <%= @room.start_time %></p>
@@ -19,10 +18,10 @@
       <%= schedule.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= schedule.end_time.strftime("%Y-%m-%d %H:%M") %>
       <p><%= schedule.description %></p>
       <p>コスト: <%= schedule.cost %>円</p>
+      <%= link_to '詳細を表示', room_schedule_path(schedule.room, schedule), class: 'btn btn-info' %>
     </li>
   <% end %>
 </ul>
-
     <%= link_to "スケジュールを追加", new_room_schedule_path(@room), class: "btn btn-primary" %>
     
     

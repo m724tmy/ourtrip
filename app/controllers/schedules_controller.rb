@@ -15,6 +15,11 @@ class SchedulesController < ApplicationController
         end
     end
 
+    def show
+        @room = Room.find(params[:room_id])
+        @schedule = @room.schedules.find(params[:id])
+      end
+
     private
 
     def schedule_params
