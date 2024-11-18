@@ -19,6 +19,7 @@ class RoomsController < ApplicationController
   def show 
     @room = Room.find(params[:id])
     @schedules = @room.schedules
+    @locations = @room.locations
   end
 
   private
