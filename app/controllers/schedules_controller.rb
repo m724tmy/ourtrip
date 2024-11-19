@@ -23,7 +23,7 @@ class SchedulesController < ApplicationController
     def edit
 
     end
-    
+
     def update
         @schedule = @room.schedules.build(schedule_params)
         if @schedule.update(schedule_params)
@@ -34,7 +34,6 @@ class SchedulesController < ApplicationController
     end
 
     def destroy
-        # @schedule = @room.schedules.build(schedule_params)
         if @schedule.destroy
             redirect_to room_path(@room), notice: 'スケジュールを削除しました'
         else
