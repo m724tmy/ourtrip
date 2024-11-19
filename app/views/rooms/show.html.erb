@@ -1,47 +1,75 @@
-<h1><%= @room.room_name %></h1>
-<%= link_to "Edit", edit_room_path(@room), class: "btn btn-primary" %>
-<%= button_to '退出', leave_room_path(@room), method: :delete, data: { confirm: "本当に退出しますか？" }, class: "btn btn-danger" %>
-<div class="room-content">
-  <!-- 左側: しおり一覧 -->
-  <div class="schedules">
-    <h2>Schedules</h2>
-        <p>タイトル: <%= @room.room_name %></p>
-        <p>説明: <%= @room.description %></p>
-        <p>開始日時: <%= @room.start_time %></p>
-        <p>終了日時: <%= @room.end_time %></p>
-
-<h2>スケジュール一覧</h2>
-<ul>
-  <% @room.schedules.each do |schedule| %>
-    <li>
-      <strong><%= schedule.title %></strong><br>
-      <%= schedule.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= schedule.end_time.strftime("%Y-%m-%d %H:%M") %>
-      <p><%= schedule.description %></p>
-      <p>コスト: <%= schedule.cost %>円</p>
-      <%= link_to '詳細を表示', room_schedule_path(schedule.room, schedule), class: 'btn btn-info' %>
-    </li>
-  <% end %>
-</ul>
-    <%= link_to "スケジュールを追加", new_room_schedule_path(@room), class: "btn btn-primary" %>
-    
-    
+<div class="container mt-5">
+  <!-- ルーム情報 -->
+  <div class="mb-4 text-center">
+    <h1 class="mb-3"><%= @room.room_name %></h1>
+    <p class="text-muted"><%= @room.description %></p>
+    <p><strong>開始日時:</strong> <%= @room.start_time.strftime("%Y-%m-%d %H:%M") %></p>
+    <p><strong>終了日時:</strong> <%= @room.end_time.strftime("%Y-%m-%d %H:%M") %></p>
+    <div class="d-flex justify-content-center gap-3">
+      <%= link_to "Edit", edit_room_path(@room), class: "btn btn-primary" %>
+      <%= button_to '退出', leave_room_path(@room), method: :delete, data: { confirm: "本当に退出しますか？" }, class: "btn btn-danger" %>
+      <%= link_to "もどる", root_path, class: "btn btn-secondary" %>
+    </div>
   </div>
 
-  <!-- 右側: 行きたい場所・候補一覧 -->
-<h2>行きたい場所一覧</h2>
-<ul>
-  <% @room.locations.each do |location| %>
-    <li>
-      <strong><%= location.title %></strong><br>
-      <%= location.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= location.end_time.strftime("%Y-%m-%d %H:%M") %>
-      <p><%= location.description %></p>
-      <p>コスト: <%= location.cost %>円</p>
-      <%= link_to '詳細を表示', room_location_path(location.room, location), class: 'btn btn-info' %>
-    </li>
-  <% end %>
-</ul>
+  <!-- コンテンツ: スケジュールと行きたい場所 -->
+  <div class="row">
+    <!-- 左: スケジュール -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h2 class="h5 mb-0">スケジュール一覧</h2>
+          <%= link_to "スケジュールを追加", new_room_schedule_path(@room), class: "btn btn-light btn-sm" %>
+        </div>
+        <div class="card-body">
+          <% if @room.schedules.any? %>
+            <ul class="list-group">
+              <% @room.schedules.each do |schedule| %>
+                <li class="list-group-item">
+                  <strong><%= schedule.title %></strong><br>
+                  <span class="text-muted">
+                    <%= schedule.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= schedule.end_time.strftime("%Y-%m-%d %H:%M") %>
+                  </span>
+                  <p class="mt-2"><%= schedule.description %></p>
+                  <p><strong>コスト:</strong> <%= schedule.cost %>円</p>
+                  <%= link_to '詳細を表示', room_schedule_path(schedule.room, schedule), class: 'btn btn-info btn-sm' %>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-muted">スケジュールがまだありません。</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-<%= link_to "行きたい場所を追加", new_room_location_path(@room), class: "btn btn-primary" %>
+    <!-- 右: 行きたい場所 -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+          <h2 class="h5 mb-0">行きたい場所一覧</h2>
+          <%= link_to "行きたい場所を追加", new_room_location_path(@room), class: "btn btn-light btn-sm" %>
+        </div>
+        <div class="card-body">
+          <% if @room.locations.any? %>
+            <ul class="list-group">
+              <% @room.locations.each do |location| %>
+                <li class="list-group-item">
+                  <strong><%= location.title %></strong><br>
+                  <span class="text-muted">
+                    <%= location.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= location.end_time.strftime("%Y-%m-%d %H:%M") %>
+                  </span>
+                  <p class="mt-2"><%= location.description %></p>
+                  <p><strong>コスト:</strong> <%= location.cost %>円</p>
+                  <%= link_to '詳細を表示', room_location_path(location.room, location), class: 'btn btn-info btn-sm' %>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-muted">行きたい場所がまだありません。</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<%= link_to "もどる", root_path %>
