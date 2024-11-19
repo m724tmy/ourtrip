@@ -1,0 +1,21 @@
+<h1>行きたい場所詳細</h1>
+
+<p><strong>タイトル:</strong> <%= @location.title %></p>
+<p><strong>開始時間:</strong> <%= @location.start_time.strftime('%Y-%m-%d %H:%M') %></p>
+<p><strong>終了時間:</strong> <%= @location.end_time.strftime('%Y-%m-%d %H:%M') %></p>
+<p><strong>説明:</strong> <%= @location.description %></p>
+<p><strong>コスト:</strong> <%= @location.cost %> 円</p>
+<p><strong>参照URL:</strong> 
+  <% if @location.reference_url.present? %>
+    <a href="<%= @location.reference_url %>" target="_blank">リンクを開く</a>
+  <% else %>
+    なし
+  <% end %>
+</p>
+
+<p><strong>緯度:</strong> <%= @location.latitude %></p>
+<p><strong>経度:</strong> <%= @location.longitude %></p>
+
+<%= link_to '編集する', edit_room_location_path(@room, @location), class: 'btn btn-primary' %>
+<%= link_to '削除する', room_location_path(@room, @location), data: { turbo_method: :delete }, class: 'btn btn-danger' %>
+<%= link_to '戻る', room_path(@room), class: 'btn btn-secondary' %>

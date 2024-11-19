@@ -36,6 +36,7 @@
       <%= location.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= location.end_time.strftime("%Y-%m-%d %H:%M") %>
       <p><%= location.description %></p>
       <p>コスト: <%= location.cost %>円</p>
+      <%= link_to '詳細を表示', room_location_path(location.room, location), class: 'btn btn-info' %>
     </li>
   <% end %>
 </ul>

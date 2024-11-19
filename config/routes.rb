@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   root to: "rooms#index"
   resources :rooms do
     resources :schedules
-    resources :locations, only: [:index, :new, :create, :edit, :update]
+    resources :locations
     member do
       delete :leave
     end
