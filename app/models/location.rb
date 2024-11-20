@@ -1,6 +1,8 @@
 class Location < ApplicationRecord
     belongs_to :room
     belongs_to :user
+    has_many :schedule_locations, dependent: :destroy
+    has_many :schedules, through: :schedule_locations
 
     validates :title, presence: true
     validates :latitude, numericality: true, allow_nil: true
