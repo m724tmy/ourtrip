@@ -3,8 +3,14 @@
   <div class="mb-4 text-center">
     <h1 class="mb-3"><%= @room.room_name %></h1>
     <p class="text-muted"><%= @room.description %></p>
-    <p><strong>開始日時:</strong> <%= @room.start_time.strftime("%Y-%m-%d %H:%M") %></p>
-    <p><strong>終了日時:</strong> <%= @room.end_time.strftime("%Y-%m-%d %H:%M") %></p>
+<% if @room.start_time.present? && @room.end_time.present? %>
+  <p><strong>開始日時:</strong> <%= @room.start_time.strftime("%Y-%m-%d %H:%M") %></p>
+  <p><strong>終了日時:</strong> <%= @room.end_time.strftime("%Y-%m-%d %H:%M") %></p>
+<% else %>
+  <p><strong>開始日時:</strong>
+  <p><strong>終了日時:</strong>
+<% end %>
+
     <div class="d-flex justify-content-center gap-3">
       <%= link_to "Edit", edit_room_path(@room), class: "btn btn-primary" %>
       <%= button_to '退出', leave_room_path(@room), method: :delete, data: { confirm: "本当に退出しますか？" }, class: "btn btn-danger" %>
