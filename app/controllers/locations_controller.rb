@@ -25,7 +25,6 @@ class LocationsController < ApplicationController
     end
 
     def update
-        @location = @room.locations.build(location_params)
         if @location.update(location_params)
             redirect_to room_location_path(@room, @location), notice: '行きたい場所を更新しました'
         else
@@ -42,10 +41,6 @@ class LocationsController < ApplicationController
     end
 
     private
-
-    def set_room
-        @room = Room.find(params[:room_id])
-    end
 
     def location_params
         params.require(:location).permit(:title, :start_time, :end_time, :description, :cost, :reference_url, :latitude, :longitude).merge(user_id: current_user.id)

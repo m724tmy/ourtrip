@@ -25,7 +25,6 @@ class SchedulesController < ApplicationController
     end
 
     def update
-        @schedule = @room.schedules.build(schedule_params)
         if @schedule.update(schedule_params)
             redirect_to room_schedule_path(@room, @schedule), notice: 'スケジュールを更新しました'
         else
@@ -44,10 +43,6 @@ class SchedulesController < ApplicationController
 
     private
     
-    def set_room
-        @room = Room.find(params[:room_id])
-    end
-
     def schedule_params
         params.require(:schedule).permit(:title, :start_time, :end_time, :description, :cost, :reference_url, :latitude, :longitude).merge(user_id: current_user.id)
     end
