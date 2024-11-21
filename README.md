@@ -66,7 +66,7 @@
 - belongs_to :room
 - belongs_to :user
 - has_many :comments, as: :commentable
-- has_many :schedule_locations
+- has_many :schedule_locations, dependent: :destroy
 - has_many :locations, through: :schedule_locations
 
 ## Locations テーブル
@@ -91,7 +91,7 @@
 - belongs_to :user
 - has_many :tags, through: :location_tags
 - has_many :location_tags
-- has_many :schedule_locations
+- has_many :schedule_locations, dependent: :destroy
 - has_many :schedules, through: :schedule_locations
 - has_one :rating
 
