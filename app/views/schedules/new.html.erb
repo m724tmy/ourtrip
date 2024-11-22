@@ -46,3 +46,29 @@
     <%= f.submit "スケジュールを追加", class: "btn btn-success" %>
   </div>
 <% end %>
+
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    <h2 class="h5 mb-0">候補一覧</h2>
+  </div>
+  <div class="card-body">
+    <% if @room.locations.any? %>
+      <ul class="list-group">
+              <% @room.locations.each do |location| %>
+                <li class="list-group-item">
+                  <strong><%= location.title %></strong><br>
+                  <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), method: :post %>
+                  <span class="text-muted">
+                    <%= location.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= location.end_time.strftime("%Y-%m-%d %H:%M") %>
+                  </span>
+                  <p class="mt-2"><%= location.description %></p>
+                  <p><strong>コスト:</strong> <%= location.cost %>円</p>
+                  <%= link_to '詳細を表示', room_location_path(location.room, location), class: 'btn btn-info btn-sm' %>
+                </li>
+              <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">候補地がまだありません。</p>
+    <% end %>
+  </div>
+</div>

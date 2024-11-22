@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   root to: "rooms#index"
   resources :rooms do
     resources :schedules do
-      member do
+      collection do
         post 'add_from_location'
       end
     end

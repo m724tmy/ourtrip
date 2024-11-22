@@ -62,7 +62,8 @@
               <% @room.locations.each do |location| %>
                 <li class="list-group-item">
                   <strong><%= location.title %></strong><br>
-                  <%= button_to 'スケジュールに追加', add_from_location_room_schedule_path(@room, location_id: location.id), method: :post %>
+                  <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), method: :post %>
+
                   <span class="text-muted">
                     <%= location.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= location.end_time.strftime("%Y-%m-%d %H:%M") %>
                   </span>
