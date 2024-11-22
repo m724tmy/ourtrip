@@ -1,7 +1,9 @@
 class SchedulesController < ApplicationController
     before_action :set_room
     before_action :set_schedule, only: [:edit, :update, :show, :destroy]
+    before_action :set_location, only: [:add_from_location]
     
+
     def new
         @schedule = @room.schedules.build
     end
@@ -40,7 +42,25 @@ class SchedulesController < ApplicationController
         end
     end
 
-
+    def add_from_location
+        @schedule = @room.schedules.build(
+          title: @location.title,
+          start_time: @location.start_time,
+          end_time: @location.end_time,
+          description: @location.description,
+          cost: @location.cost,
+          reference_url: @location.reference_url,
+          latitude: @location.latitude,
+          longitude: @location.longitude,
+          user_id: @location.user_id
+        )
+    
+        if @schedule.save
+          redirect_to room_path(@room), notice: "スケジュールに追加しました"
+        else
+          redirect_to room_path(@room), alert: "スケジュールへの追加に失敗しました"
+        end
+      end
     private
     
     def schedule_params
@@ -49,6 +69,10 @@ class SchedulesController < ApplicationController
 
     def set_schedule
         @schedule = @room.schedules.find(params[:id])
+    end
+
+    def set_location
+        @location = @room.locations.find(params[:location_id])
     end
 
 end
