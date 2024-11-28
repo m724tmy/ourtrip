@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   root to: "rooms#index"
+
   resources :rooms do
     resources :schedules do
       collection do
@@ -8,8 +9,14 @@ Rails.application.routes.draw do
       end
     end
     resources :locations
+
     member do
       delete :leave
+    end
+
+    member do
+      get 'chatgpt', to: 'openais#index'
+      post 'chatgpt', to: 'openais#create'
     end
   end
 end

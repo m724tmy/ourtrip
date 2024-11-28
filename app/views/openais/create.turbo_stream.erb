@@ -1,0 +1,25 @@
+<turbo-stream action="update" target="chat-history">
+  <template>
+    <div id="chat-history" class="mb-3" style="max-height: 300px; overflow-y: auto;">
+      <% @chat_history.each do |message| %>
+        <div class="mb-2">
+          <strong><%= message.role == 'user' ? 'You:' : 'GPT:' %></strong>
+          <p><%= message.content %></p>
+        </div>
+      <% end %>
+    </div>
+  </template>
+</turbo-stream>
+
+<turbo-stream action="update" target="chat-form">
+  <template>
+    <div id="chat-form">
+      <%= form_with url: chatgpt_room_path(@room), method: :post, local: false, id: "chat-form" do |f| %>
+        <div class="input-group">
+          <%= f.text_field :message, class: "form-control", placeholder: "メッセージを入力してください", value: "", id: "message_field" %>
+          <button class="btn btn-primary" type="submit">送信</button>
+        </div>
+      <% end %>
+    </div>
+  </template>
+</turbo-stream>

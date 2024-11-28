@@ -79,5 +79,37 @@
         </div>
       </div>
     </div>
+
+    
+<div class="mt-5">
+  <div class="card">
+    <div class="card-header bg-info text-white">
+      <h2 class="h5 mb-0">ChatBOT</h2>
+    </div>
+    <div class="card-body">
+      <!-- チャット履歴 -->
+      <div id="chat-history" class="mb-3" style="max-height: 300px; overflow-y: auto;">
+        <% if @chat_history.present? %>
+          <% @chat_history.each do |message| %>
+            <div class="mb-2">
+              <strong><%= message.role == 'user' ? 'You:' : 'GPT:' %></strong>
+              <p><%= message.content %></p>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-muted">まだメッセージがありません。</p>
+        <% end %>
+      </div>
+
+      <%== form_with url: chatgpt_room_path(@room), method: :post, local: false, id: "chat-form" do |f| %>
+        <div class="input-group">
+          <%= f.text_field :message, class: "form-control", placeholder: "メッセージを入力してください", value: "" %>
+          <button class="btn btn-primary" type="submit">送信</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
   </div>
 </div>

@@ -20,6 +20,7 @@ class RoomsController < ApplicationController
     @room = Room.find(params[:id])
     @schedules = @room.schedules
     @locations = @room.locations
+    @chat_history = @room.chat_histories.order(:created_at)
   end
 
   def edit
