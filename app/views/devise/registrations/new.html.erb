@@ -1,49 +1,48 @@
-<div class='account-page' id='account-page'>
-  <div class='account-page__inner clearfix'>
-    <div class='account-page__inner--left account-page__header'>
-      <h2>Create Account</h2>
-      <h5>新規アカウントの作成</h5>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="row w-100">
+    <!-- Left Section -->
+    <div class="col-md-6 text-center my-auto">
+      <h2 class="mb-3">新規アカウント作成</h2>
     </div>
-    <div class='account-page__inner--right user-form'>
-      <%= form_with model: resource, as: resource_name, url: registration_path(resource_name), local: true do |f|%>
-        <%= render "devise/shared/error_messages", resource: resource %>
-        <div class='field'>
-          <div class='field-label'>
-            <%= f.label :nickname%>
+
+    <!-- Right Section -->
+    <div class="col-md-6">
+      <div class="card shadow p-4">
+        <%= form_with model: resource, as: resource_name, url: registration_path(resource_name), local: true do |f| %>
+          <!-- Error Messages -->
+          <%= render "devise/shared/error_messages", resource: resource %>
+
+          <!-- Nickname Field -->
+          <div class="mb-3">
+            <%= f.label :nickname, class: "form-label" %>
+            <%= f.text_field :nickname, autofocus: true, class: "form-control", placeholder: "ニックネーム" %>
           </div>
-          <div class='field-input'>
-            <%= f.text_field :nickname, autofocus: true%>
+
+          <!-- Email Field -->
+          <div class="mb-3">
+            <%= f.label :email, class: "form-label" %>
+            <%= f.email_field :email, class: "form-control", placeholder: "メールアドレス" %>
           </div>
-        </div>
-        <div class='field'>
-          <div class='field-label'>
-            <%= f.label :email%>
+
+          <!-- Password Field -->
+          <div class="mb-3">
+            <%= f.label :password, class: "form-label" %>
+            <small class="text-muted d-block">(英数字6文字以上)</small>
+            <%= f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "パスワード" %>
           </div>
-          <div class='field-input'>
-            <%= f.email_field :email%>
+
+          <!-- Password Confirmation Field -->
+          <div class="mb-3">
+            <%= f.label :password_confirmation, class: "form-label" %>
+            <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "パスワード確認" %>
           </div>
-        </div>
-        <div class='field'>
-          <div class='field-label'>
-            <%= f.label :password%>
-            <i>(英数字6文字以上)</i>
+
+          <!-- Submit Button -->
+          <div class="d-grid">
+            <%= f.submit "Create Account", class: "btn btn-primary" %>
           </div>
-          <div class='field-input'>
-            <%= f.password_field :password, autocomplete: "off"%>
-          </div>
-        </div>
-        <div class='field'>
-          <div class='field-label'>
-            <%= f.label :password_confirmation%>
-          </div>
-          <div class='field-input'>
-            <%= f.password_field :password_confirmation, autocomplete: "off"%>
-          </div>
-        </div>
-        <div class='actions'>
-          <%= f.submit "Create Account", class: 'btn'%>
-        </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </div>
 </div>
