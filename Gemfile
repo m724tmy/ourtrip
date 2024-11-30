@@ -77,3 +77,7 @@ gem 'bootstrap', '~> 5.2.3'
 gem 'jquery-rails'
 gem 'ruby-openai'
 gem 'dotenv-rails', groups: [:development, :test]
+
+group :production do
+  gem 'pg'
+end
