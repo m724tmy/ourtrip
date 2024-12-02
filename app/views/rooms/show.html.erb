@@ -1,6 +1,7 @@
 <!-- ルーム情報 -->
-<div class="container mt-5">
   <header class="masthead mb-auto">
+<div class="container mt-5">
+    <h1 class="masthead-brand">Ourtrip</h1>
     <div class="d-flex justify-content-between">
       <div>
         <h1 class="masthead-brand">
@@ -9,7 +10,7 @@
         <p class=""></p>
         <% if @room.start_time.present? && @room.end_time.present? %>
           <p><%= @room.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= @room.end_time.strftime("%Y-%m-%d %H:%M") %></p>
-        <% end %>  
+        <% end %>
       </div>
 
       <nav class="nav nav-masthead">
@@ -17,7 +18,9 @@
         <%= button_to '退出', leave_room_path(@room), method: :delete, data: { confirm: "本当に退出しますか？" }, class: "btn btn-danger" %>
       </nav>
     </div>
+    </div>
   </header>
+<div class="container mt-5">
 
   <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
     <div class="pricing-header p-3 pb-md-4">
@@ -25,9 +28,9 @@
     </div>
     <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
       <p class="me-3 py-2 link-body-emphasis" href="#">参加者:</p>
-      <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">ユーザー1</a>
-      <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">ユーザー2</a>
-      <a class="py-2 link-body-emphasis text-decoration-none" href="#">ユーザー3</a>
+      <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">user1</a>
+      <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">user2</a>
+      <a class="py-2 link-body-emphasis text-decoration-none" href="#">user3</a>
     </nav>
   </div>
 
@@ -35,105 +38,148 @@
   <div class="row">
     <!-- 左: スケジュール -->
     <div class="col-md-6">
-    <div class="card">
-    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-      <h2 class="h5 mb-0">スケジュール一覧</h2>
-    </div>
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2 class="h5 mb-0">スケジュール一覧</h2>
+          <%= link_to "追加", new_room_schedule_path(@room), class: "btn btn-light btn-sm" %>
+        </div>
 
-    <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
-      <% if @room.schedules.any? %>
-        <div class="list-group w-100">
-          <% @room.schedules.each do |schedule| %>
-            <div class="list-group-item list-group-item-action d-flex gap-3 py-3">
-              <img src="/assets/sample-user-icon.png" alt="Schedule Thumbnail" width="80" height="80" class="rounded-circle flex-shrink-0 ">
-              <p>ユーザー名</p>
-              <div class="d-flex gap-2 w-100 justify-content-between">
-                <div>
-                  <h6 class="mb-0"><%= schedule.title %></h6>
-                  <p class="mb-0 opacity-75"><%= schedule.description %></p>
-                  <% if schedule.start_time.present? && schedule.end_time.present? %>
-                    <small class="text-muted d-block mt-1">
-                      <%= schedule.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= schedule.end_time.strftime("%Y-%m-%d %H:%M") %>
-                    </small>
-                  <% end %>
-                  <small class="text-muted d-block mt-1"><strong>コスト:</strong> <%= schedule.cost %>円</small>
-                </div>
-                <div class="text-nowrap">
-                  <%= link_to '詳細を表示', room_schedule_path(schedule.room, schedule), class: 'btn btn-info btn-sm d-block' %>
-                  <%= link_to '編集する', edit_room_schedule_path(schedule.room, schedule), class: 'btn btn-info btn-sm d-block my-2' %>
-                </div>
-              </div>
+        <div class="card-body p-4">
+          <% if @room.schedules.any? %>
+            <div class="list-group w-100">
+              <% @room.schedules.each do |schedule| %>
+                <%= link_to room_schedule_path(schedule.room, schedule), class: 'd-flex gap-4 py-3 text-decoration-none' do %>
+                  <div class="list-group-item list-group-item-action d-flex w-100 align-items-center position-relative">
+                    <!-- ユーザーアイコンとユーザー名 -->
+                    <div class="d-flex flex-column align-items-center me-4">
+                      <%= image_tag 'sample-user-icon.png', alt: 'User Icon', size: '80x80', class: 'rounded-circle mb-2' %>
+                      <p class="d-flex text-center text-muted" style="font-size: 0.9rem;">ユーザー名</p>
+                    </div>
+
+                    <!-- スケジュールの詳細情報 -->
+                    <div class="d-flex flex-column w-100">
+                      <h6 class="mb-1"><%= schedule.title %></h6>
+                      <p class="mb-1 opacity-75"><%= schedule.description %></p>
+                      <% if schedule.start_time.present? && schedule.end_time.present? %>
+                        <small class="text-muted d-block mt-1">
+                          <%= schedule.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= schedule.end_time.strftime("%Y-%m-%d %H:%M") %>
+                        </small>
+                      <% end %>
+                      <small class="text-muted d-block mt-1"><strong>コスト:</strong> <%= schedule.cost %>円</small>
+                    </div>
+
+                    <!-- 編集ボタンを右下に配置 -->
+                    <%= link_to '編集', edit_room_schedule_path(schedule.room, schedule), class: 'btn btn-primary btn-sm position-absolute', style: 'bottom: 50px; right: 30px;' %>
+                  </div>
+                <% end %>
+              <% end %>
             </div>
+          <% else %>
+            <p class="text-muted">スケジュールがまだありません。</p>
           <% end %>
         </div>
-      <% else %>
-        <p class="text-muted">スケジュールがまだありません。</p>
-      <% end %>
+        <%= link_to new_room_schedule_path(@room), class: "text-decoration-none" do %>
+          <div class="border-primary text-center">
+            <div class="d-flex flex-column justify-content-end align-items-end p-4">
+              <%= image_tag 'plus-icon.png', alt: '+', size: '80x80' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
-    <%= link_to "スケジュールを追加", new_room_schedule_path(@room), class: "btn btn-light btn-sm" %>
-    </div>
-</div>
+
     <!-- 右: 行きたい場所 -->
     <div class="col-md-6">
       <div class="card">
-        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+        <div class="card-header d-flex justify-content-between align-items-center">
           <h2 class="h5 mb-0">行きたい場所一覧</h2>
-          <%= link_to "行きたい場所を追加", new_room_location_path(@room), class: "btn btn-light btn-sm" %>
+          <%= link_to "追加", new_room_location_path(@room), class: "btn btn-light btn-sm" %>
         </div>
-        <div class="card-body">
+        <div class="card-body p-4">
           <% if @room.locations.any? %>
-            <ul class="list-group">
+            <div class="list-group w-100">
               <% @room.locations.each do |location| %>
-                <li class="list-group-item">
-                  <strong><%= location.title %></strong><br>
-                  <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), method: :post %>
-                  <span class="text-muted">
-                    <%= location.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= location.end_time.strftime("%Y-%m-%d %H:%M") %>
-                  </span>
-                  <p class="mt-2"><%= location.description %></p>
-                  <p><strong>コスト:</strong> <%= location.cost %>円</p>
-                  <%= link_to '詳細を表示', room_location_path(location.room, location), class: 'btn btn-info btn-sm' %>
-                </li>
+                <%= link_to room_location_path(location.room, location), class: 'd-flex gap-4 py-3 text-decoration-none' do %>
+                  <div class="list-group-item list-group-item-action d-flex w-100 align-items-center position-relative">
+                    <!-- 場所アイコンと場所名 -->
+                    <div class="d-flex flex-column align-items-center me-4">
+                      <%= image_tag 'sample-user-icon.png', alt: 'User Icon', size: '80x80', class: 'rounded-circle mb-2' %>
+                      <p class="d-flex text-center text-muted" style="font-size: 0.9rem;">ユーザー名</p>
+                    </div>
+
+                    <!-- 行きたい場所の詳細情報 -->
+                    <div class="d-flex flex-column w-100">
+                      <h6 class="mb-1"><%= location.title %></h6>
+                      <p class="mb-1 opacity-75"><%= location.description %></p>
+                      <% if location.start_time.present? && location.end_time.present? %>
+                        <small class="text-muted d-block mt-1">
+                          <%= location.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= location.end_time.strftime("%Y-%m-%d %H:%M") %>
+                        </small>
+                      <% end %>
+                      <small class="text-muted d-block mt-1"><strong>コスト:</strong> <%= location.cost %>円</small>
+                    </div>
+
+                    <!-- 詳細ボタンを右下に配置 -->
+                    <%= link_to '編集', edit_room_location_path(location.room, location), class: 'btn btn-primary btn-sm position-absolute', style: 'bottom: 50px; right: 30px;' %>
+                  </div>
+                <% end %>
               <% end %>
-            </ul>
+            </div>
           <% else %>
             <p class="text-muted">行きたい場所がまだありません。</p>
           <% end %>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- チャットボット -->
-  <div class="mt-5">
-    <div class="card">
-      <div class="card-header bg-info text-white">
-        <h2 class="h5 mb-0">ChatBOT</h2>
-      </div>
-      <div class="card-body">
-        <!-- チャット履歴 -->
-        <div id="chat-history" class="mb-3" style="max-height: 300px; overflow-y: auto;">
-          <% if @chat_history.present? %>
-            <% @chat_history.each do |message| %>
-              <div class="mb-2">
-                <strong><%= message.role == 'user' ? 'You:' : 'GPT:' %></strong>
-                <p><%= message.content %></p>
-              </div>
-            <% end %>
-          <% else %>
-            <p class="text-muted">まだメッセージがありません。</p>
-          <% end %>
-        </div>
-
-        <%== form_with url: chatgpt_room_path(@room), method: :post, local: false, id: "chat-form" do |f| %>
-          <div class="input-group">
-            <%= f.text_field :message, class: "form-control", placeholder: "メッセージを入力してください", value: "" %>
-            <button class="btn btn-primary" type="submit">送信</button>
+        <%= link_to new_room_location_path(@room), class: "text-decoration-none" do %>
+          <div class="border-primary text-center">
+            <div class="d-flex flex-column justify-content-end align-items-end p-4">
+              <%= image_tag 'plus-icon.png', alt: '+', size: '80x80' %>
+            </div>
           </div>
         <% end %>
       </div>
     </div>
   </div>
+
+<div class="col-md-12 mt-5">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h2 class="h5 mb-0">ChatGPT</h2>
+    </div>
+    <div class="card-body p-4">
+      <!-- チャット履歴 -->
+      <div id="chat-history" class="mb-3" style="max-height: 300px; overflow-y: auto;">
+        <% if @chat_history.present? %>
+          <div class="list-group">
+            <% @chat_history.each do |message| %>
+              <div class="list-group-item d-flex gap-3 py-3">
+                <div class="d-flex flex-column w-100">
+                  <strong><%= message.role == 'user' ? 'You:' : 'GPT:' %></strong>
+                  <p><%= message.content %></p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-muted">まだメッセージがありません。</p>
+        <% end %>
+      </div>
+
+      <!-- メッセージ入力フォーム -->
+      <%== form_with url: chatgpt_room_path(@room), method: :post, local: false, id: "chat-form" do |f| %>
+        <div class="d-flex">
+          <div class="flex-grow-1">
+            <%= f.text_field :message, class: "form-control", placeholder: "メッセージを入力してください" %>
+          </div>
+          <div class="ml-2">
+            <button class="btn btn-primary" type="submit">送信</button>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
 
   <div class="my-5">
     <%= link_to "もどる", root_path, class: "btn btn-secondary" %>
