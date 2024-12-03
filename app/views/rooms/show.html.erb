@@ -140,38 +140,44 @@
     </div>
     <div class="card-body p-4">
       <!-- チャット履歴 -->
-      <div id="chat-history" class="mb-3" style="max-height: 300px; overflow-y: auto;">
-        <% if @chat_history.present? %>
-          <div class="list-group">
-            <% @chat_history.each do |message| %>
-              <div class="list-group-item d-flex gap-3 py-3">
-                <div class="d-flex flex-column w-100">
-                  <strong><%= message.role == 'user' ? 'You:' : 'GPT:' %></strong>
-                  <p><%= message.content %></p>
+      <div id="chat-history-container" class="mb-3" style="max-height: 600px; overflow-y: auto;">
+        <div id="chat-history">
+          <% if @chat_history.present? %>
+            <div class="list-group">
+              <% @chat_history.each do |message| %>
+                <div class="list-group-item d-flex gap-3 py-3">
+                  <div class="d-flex flex-column w-100">
+                    <strong><%= message.role == 'user' ? 'あなた:' : 'ChatGPT:' %></strong>
+                    <p><%= simple_format(message.content) %></p>
+                  </div>
                 </div>
-              </div>
-            <% end %>
-          </div>
-        <% else %>
-          <p class="text-muted">まだメッセージがありません。</p>
-        <% end %>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-muted">まだメッセージがありません。</p>
+          <% end %>
+        </div>
       </div>
 
       <!-- メッセージ入力フォーム -->
-      <%== form_with url: chatgpt_room_path(@room), method: :post, local: false, id: "chat-form" do |f| %>
-        <div class="d-flex">
-          <div class="flex-grow-1">
-            <%= f.text_field :message, class: "form-control", placeholder: "メッセージを入力してください" %>
-          </div>
-          <div class="ml-2">
-            <button class="btn btn-primary" type="submit">送信</button>
-          </div>
+      <%= form_with url: chatgpt_room_path(@room), method: :post, local: false, id: "chat-form" do |f| %>
+        <div class="input-group">
+          <%= f.text_area :message, class: "form-control", placeholder: "メッセージを入力してください", rows: 3 %>
+          <button class="btn btn-primary" type="submit">送信</button>
         </div>
       <% end %>
     </div>
   </div>
 </div>
 
+<!-- フォーム送信後にメッセージフィールドをクリアするためのスクリプト -->
+<script>
+  document.addEventListener('turbo:submit-end', function(event) {
+    if (event.target.id === 'chat-form') {
+      document.getElementById('message_field').value = '';
+    }
+  });
+</script>
 
 
   <div class="my-5">
