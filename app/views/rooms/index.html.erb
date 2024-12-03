@@ -12,12 +12,11 @@
 
 <div class="container mt-5">
   <div class="row gy-2">
-    <!-- 各ルーム情報 -->
     <% current_user.rooms.each do |room| %>
       <div class="col-md-3">
         <%= link_to room_path(room), class: "text-decoration-none" do %>
           <div class="card border-secondary h-100" style="aspect-ratio: 1;">
-            <div class="card-body p-3 d-flex flex-column">  <!-- p-3 によってカード内の余白を小さく -->
+            <div class="card-body p-3 d-flex flex-column">
               <h5 class="card-title text-dark"><%= room.room_name %></h5>
               <% if room.start_time.present? && room.end_time.present? %>
                 <p class="text-muted">
@@ -33,7 +32,6 @@
       </div>
     <% end %>
 
-    <!-- 新規作成ボタン -->
     <div class="col-md-3">
       <%= link_to new_room_path, class: "text-decoration-none" do %>
         <div class="card border-primary text-center h-100" style="aspect-ratio: 1;">

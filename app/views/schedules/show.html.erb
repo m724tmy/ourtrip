@@ -1,21 +1,69 @@
-<h1>スケジュール詳細</h1>
+<div class="container py-5">
+  <h1 class="my-4 text-center">スケジュール詳細</h1>
 
-<p><strong>タイトル:</strong> <%= @schedule.title %></p>
-<p><strong>開始時間:</strong> <%= @schedule.start_time.strftime('%Y-%m-%d %H:%M') %></p>
-<p><strong>終了時間:</strong> <%= @schedule.end_time.strftime('%Y-%m-%d %H:%M') %></p>
-<p><strong>説明:</strong> <%= @schedule.description %></p>
-<p><strong>コスト:</strong> <%= @schedule.cost %> 円</p>
-<p><strong>参照URL:</strong> 
-  <% if @schedule.reference_url.present? %>
-    <a href="<%= @schedule.reference_url %>" target="_blank">リンクを開く</a>
-  <% else %>
-    なし
-  <% end %>
-</p>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg p-4">
 
-<p><strong>緯度:</strong> <%= @schedule.latitude %></p>
-<p><strong>経度:</strong> <%= @schedule.longitude %></p>
+        <div class="mb-3">
+          <label class="form-label"><strong>タイトル</strong></label>
+          <p class="form-control bg-light"><%= @schedule.title %></p>
+        </div>
 
-<%= link_to '編集する', edit_room_schedule_path(@room, @schedule), class: 'btn btn-primary' %>
-<%= link_to '削除する', room_schedule_path(@room, @schedule), data: { turbo_method: :delete }, class: 'btn btn-danger' %>
-<%= link_to '戻る', room_path(@room), class: 'btn btn-secondary' %>
+        <div class="mb-3">
+          <label class="form-label"><strong>予定時間</strong></label>
+          <p class="form-control bg-light">
+            <% if @schedule.start_time.present? && @schedule.end_time.present? %>
+              <small class="text-muted d-block mt-1">
+                <%= @schedule.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= @schedule.end_time.strftime("%Y-%m-%d %H:%M") %>
+              </small>
+            <% end %>
+
+          </p>
+        </div>
+
+
+
+        <div class="mb-3">
+          <label class="form-label"><strong>詳細</strong></label>
+          <p class="form-control bg-light"><%= @schedule.description %></p>
+        </div>
+
+
+        <div class="mb-3">
+          <label class="form-label"><strong>費用</strong></label>
+          <p class="form-control bg-light">
+            <%= number_to_currency(@schedule.cost, unit: "¥", precision: 0) %>
+          </p>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label"><strong>参考URL</strong></label>
+          <p class="form-control bg-light">
+            <% if @schedule.reference_url.present? %>
+              <a href="<%= @schedule.reference_url %>" target="_blank" class="text-primary">リンクを開く</a>
+            <% else %>
+              なし
+            <% end %>
+          </p>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label"><strong>緯度</strong></label>
+          <p class="form-control bg-light"><%= @schedule.latitude %></p>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label"><strong>経度</strong></label>
+          <p class="form-control bg-light"><%= @schedule.longitude %></p>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <%= link_to '編集する', edit_room_schedule_path(@room, @schedule), class: 'btn btn-primary mx-2' %>
+        <%= link_to '削除する', room_schedule_path(@room, @schedule), data: { turbo_method: :delete, confirm: '本当に削除しますか？' }, class: 'btn btn-danger mx-2' %>
+        <%= link_to 'もどる', room_path(@room), class: 'btn btn-secondary mx-2' %>
+      </div>
+    </div>
+  </div>
+</div>

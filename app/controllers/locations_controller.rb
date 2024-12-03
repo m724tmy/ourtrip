@@ -11,7 +11,6 @@ class LocationsController < ApplicationController
         if @location.save
             redirect_to room_path(@room), notice: "行きたい場所を追加しました"
         else
-            # Rails.logger.debug("保存失敗: #{@location.errors.full_messages}")
             render :new, alert: "行きたい場所の追加に失敗しました"
         end
     end
@@ -26,7 +25,7 @@ class LocationsController < ApplicationController
 
     def update
         if @location.update(location_params)
-            redirect_to room_location_path(@room, @location), notice: '行きたい場所を更新しました'
+            redirect_to room_path(@room), notice: '行きたい場所を更新しました'
         else
             render :edit, alert: '行きたい場所の更新に失敗しました'
         end

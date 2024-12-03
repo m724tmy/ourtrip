@@ -28,7 +28,7 @@ class SchedulesController < ApplicationController
 
     def update
         if @schedule.update(schedule_params)
-            redirect_to room_schedule_path(@room, @schedule), notice: 'スケジュールを更新しました'
+            redirect_to room_path(@room), notice: 'スケジュールを更新しました'
         else
             render :edit, alert: 'スケジュールの更新に失敗しました'
         end

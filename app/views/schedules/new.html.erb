@@ -1,74 +1,93 @@
-<h1>スケジュールを追加</h1>
+<div class="container py-5">
+  <h1 class="my-4 text-center">スケジュールを追加</h1>
 
-<%= form_with model: [@room, @schedule], local: true do |f| %>
-  <div class="form-group">
-    <%= f.label :title, "タイトル" %>
-    <%= f.text_field :title, class: "form-control" %>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg p-4">
+        <%= form_with model: [@room, @schedule], local: true do |f| %>
+          <div class="mb-3">
+            <%= f.label :title, "タイトル", class: "form-label" %>
+            <%= f.text_field :title, required: true, class: "form-control", placeholder: "スケジュールタイトル" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :start_time, "開始日時", class: "form-label" %>
+            <div class="d-flex">
+              <%= f.date_field :start_time, class: "form-control me-2" %>
+              <%= f.time_field :start_time, class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :end_time, "終了日時", class: "form-label" %>
+            <div class="d-flex">
+              <%= f.date_field :end_time, class: "form-control me-2" %>
+              <%= f.time_field :end_time, class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :description, "詳細", class: "form-label" %>
+            <%= f.text_area :description, class: "form-control", placeholder: "スケジュールの詳細を入力してください" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :cost, "費用", class: "form-label" %>
+            <%= f.number_field :cost, class: "form-control", placeholder: "費用を入力 (例: 5000)" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :reference_url, "参考URL", class: "form-label" %>
+            <%= f.text_field :reference_url, class: "form-control", placeholder: "例: https://example.com" %>
+          </div>
+
+          <div class="text-center">
+            <%= f.submit "スケジュールを追加", class: "btn btn-primary w-100" %>
+          </div>
+        <% end %>
+
+        <div class="text-center mt-3">
+          <%= link_to "もどる", room_path(@room), class: "btn btn-secondary" %>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="form-group">
-    <%= f.label :start_time, "開始時間" %>
-    <%= f.datetime_select :start_time, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :end_time, "終了時間" %>
-    <%= f.datetime_select :end_time, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :description, "詳細" %>
-    <%= f.text_area :description, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :cost, "費用" %>
-    <%= f.number_field :cost, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :reference_url, "参考URL" %>
-    <%= f.text_field :reference_url, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :latitude, "緯度" %>
-    <%= f.number_field :latitude, step: 0.000001, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :longitude, "経度" %>
-    <%= f.number_field :longitude, step: 0.000001, class: "form-control" %>
-  </div>
-
-
-  <div class="actions">
-    <%= f.submit "スケジュールを追加", class: "btn btn-success" %>
-  </div>
-<% end %>
-
-<div class="card">
-  <div class="card-header bg-primary text-white">
-    <h2 class="h5 mb-0">候補一覧</h2>
-  </div>
-  <div class="card-body">
-    <% if @room.locations.any? %>
-      <ul class="list-group">
+  <div class="row mt-5 py-5">
+    <div class="col-md-12">
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+          <h2 class="h5 mb-0">候補一覧</h2>
+        </div>
+        <div class="card-body">
+          <% if @room.locations.any? %>
+            <ul class="list-group">
               <% @room.locations.each do |location| %>
                 <li class="list-group-item">
-                  <strong><%= location.title %></strong><br>
-                  <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), method: :post %>
-                  <span class="text-muted">
-                    <%= location.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= location.end_time.strftime("%Y-%m-%d %H:%M") %>
-                  </span>
-                  <p class="mt-2"><%= location.description %></p>
-                  <p><strong>コスト:</strong> <%= location.cost %>円</p>
-                  <%= link_to '詳細を表示', room_location_path(location.room, location), class: 'btn btn-info btn-sm' %>
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <strong><%= location.title %></strong><br>
+                      <span class="text-muted">
+                        <% if location.start_time.present? && location.end_time.present? %>
+                          <%= location.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= location.end_time.strftime("%Y-%m-%d %H:%M") %>
+                        <% end %>
+                      </span>
+                      <p class="mt-2"><%= location.description %></p>
+                      <p><strong>コスト:</strong> <%= location.cost %>円</p>
+                    </div>
+                    <div class="text-end">
+                      <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), method: :post, class: "btn btn-success btn-sm mb-2" %>
+                      <%= link_to '詳細を表示', room_location_path(location.room, location), class: 'btn btn-info btn-sm' %>
+                    </div>
+                  </div>
                 </li>
               <% end %>
-      </ul>
-    <% else %>
-      <p class="text-muted">候補地がまだありません。</p>
-    <% end %>
+            </ul>
+          <% else %>
+            <p class="text-muted">候補地がまだありません。</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
