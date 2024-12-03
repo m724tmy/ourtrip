@@ -13,7 +13,6 @@ class SchedulesController < ApplicationController
         if @schedule.save
             redirect_to room_path(@room), notice: "スケジュールを追加しました"
         else
-            # Rails.logger.debug("保存失敗: #{@schedule.errors.full_messages}")
             render :new, alert: "スケジュールの追加に失敗しました"
         end
     end
