@@ -24,6 +24,8 @@ class LocationsController < ApplicationController
     end
 
     def update
+        params[:location][:start_time] = combine_date_and_time(params[:location][:start_time], params[:location][:start_date])
+        params[:location][:end_time] = combine_date_and_time(params[:location][:end_time], params[:location][:end_date])
         if @location.update(location_params)
             redirect_to room_path(@room), notice: '行きたい場所を更新しました'
         else
@@ -47,6 +49,11 @@ class LocationsController < ApplicationController
 
     def set_location
         @location = @room.locations.find(params[:id])
+    end
+
+    def combine_date_and_time(time, date)
+        return if time.blank? || date.blank?
+        "#{date} #{time}".to_datetime
     end
 
 end

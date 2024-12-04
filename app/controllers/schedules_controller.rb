@@ -26,6 +26,9 @@ class SchedulesController < ApplicationController
     end
 
     def update
+        params[:schedule][:start_time] = combine_date_and_time(params[:schedule][:start_time], params[:schedule][:start_date])
+        params[:schedule][:end_time] = combine_date_and_time(params[:schedule][:end_time], params[:schedule][:end_date])
+
         if @schedule.update(schedule_params)
             redirect_to room_path(@room), notice: 'スケジュールを更新しました'
         else
@@ -72,6 +75,11 @@ class SchedulesController < ApplicationController
 
     def set_location
         @location = @room.locations.find(params[:location_id])
+    end
+
+    def combine_date_and_time(time, date)
+        return if time.blank? || date.blank?
+        "#{date} #{time}".to_datetime
     end
 
 end
