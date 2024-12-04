@@ -1,5 +1,5 @@
-  <header class="masthead mb-auto">
-<div class="container mt-5">
+<header class="masthead mb-auto">
+  <div class="container mt-5">
     <h1 class="masthead-brand">Ourtrip</h1>
     <div class="d-flex justify-content-between">
       <div>
@@ -17,10 +17,10 @@
         <%= button_to '退出', leave_room_path(@room), method: :delete, data: { confirm: "本当に退出しますか？" }, class: "btn btn-danger" %>
       </nav>
     </div>
-    </div>
-  </header>
-<div class="container mt-5">
+  </div>
+</header>
 
+<div class="container mt-5">
   <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
     <div class="pricing-header p-3 pb-md-4">
       <p class="text-body-secondary">説明文:<br/><%= @room.description %></p>
@@ -72,6 +72,7 @@
             <p class="text-muted">スケジュールがまだありません。</p>
           <% end %>
         </div>
+
         <%= link_to new_room_schedule_path(@room), class: "text-decoration-none" do %>
           <div class="border-primary text-center">
             <div class="d-flex flex-column justify-content-end align-items-end p-4">
@@ -88,6 +89,7 @@
           <h2 class="h5 mb-0">行きたい場所一覧</h2>
           <%= link_to "追加", new_room_location_path(@room), class: "btn btn-light btn-sm" %>
         </div>
+
         <div class="card-body p-4">
           <% if @room.locations.any? %>
             <div class="list-group w-100">
@@ -112,16 +114,15 @@
 
                     <%= link_to '編集', edit_room_location_path(location.room, location), class: 'btn btn-primary btn-sm position-absolute', style: 'bottom: 50px; right: 30px;' %>
                   </div>
-                  
-                  
                 <% end %>
-              <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), class: 'my-2 btn btn-outline-secondary', method: :post %>
+                <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), class: 'my-2 btn btn-outline-secondary', method: :post %>
               <% end %>
             </div>
           <% else %>
             <p class="text-muted">行きたい場所がまだありません。</p>
           <% end %>
         </div>
+
         <%= link_to new_room_location_path(@room), class: "text-decoration-none" do %>
           <div class="border-primary text-center">
             <div class="d-flex flex-column justify-content-end align-items-end p-4">
@@ -133,52 +134,177 @@
     </div>
   </div>
 
-<div class="col-md-12 mt-5">
-  <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <h2 class="h5 mb-0">ChatGPT</h2>
-    </div>
-    <div class="card-body p-4">
-      <!-- チャット履歴 -->
-      <div id="chat-history-container" class="mb-3" style="max-height: 600px; overflow-y: auto;">
-        <div id="chat-history">
-          <% if @chat_history.present? %>
-            <div class="list-group">
-              <% @chat_history.each do |message| %>
-                <div class="list-group-item d-flex gap-3 py-3">
-                  <div class="d-flex flex-column w-100">
-                    <strong><%= message.role == 'user' ? 'あなた:' : 'ChatGPT:' %></strong>
-                    <p><%= simple_format(message.content) %></p>
-                  </div>
-                </div>
-              <% end %>
-            </div>
-          <% else %>
-            <p class="text-muted">まだメッセージがありません。</p>
-          <% end %>
-        </div>
+  <div class="col-md-12 mt-5">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="h5 mb-0">ChatGPT</h2>
       </div>
+      <div class="card-body p-4">
+        <!-- チャット履歴 -->
+        <div id="chat-history-container" class="mb-3" style="max-height: 600px; overflow-y: auto;">
+          <div id="chat-history">
+            <% if @chat_history.present? %>
+              <div class="list-group">
+                <% @chat_history.each do |message| %>
+                  <div class="list-group-item d-flex gap-3 p-5">
+                    <div class="d-flex flex-column w-100">
+                      <strong><%= message.role == 'user' ? 'あなた:' : 'ChatGPT:' %></strong>
+                      <p><%= raw(message.content) %></p>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-muted">まだメッセージがありません。</p>
+            <% end %>
+          </div>
+        </div>
 
-      <!-- メッセージ入力フォーム -->
-      <%= form_with url: chatgpt_room_path(@room), method: :post, local: false, id: "chat-form" do |f| %>
-        <div class="input-group">
-          <%= f.text_area :message, class: "form-control", placeholder: "メッセージを入力してください", rows: 3 %>
-          <button class="btn btn-primary" type="submit">送信</button>
+        <!-- メッセージ入力フォーム -->
+        <%= form_with url: chatgpt_room_path(@room), method: :post, local: false, id: "chat-form" do |f| %>
+          <div class="input-group">
+            <%= f.text_area :message, class: "form-control", placeholder: "メッセージを入力してください", rows: 3 %>
+            <button class="btn btn-primary" type="submit">送信</button>
+          </div>
+        <% end %>
+
+
+
+
+        <!-- プロンプトテンプレート -->
+      <div class="mt-4">
+        <h3>プロンプトテンプレート一覧</h3>
+        <p>クリックで表示</p>
+        <!-- スケジュール生成 -->
+        <div class="my-5">
+          <h4 class="h6">
+            <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#schedule-template" aria-expanded="false" aria-controls="schedule-template">
+              スケジュール生成 >>
+            </button>
+          </h4>
+          <div id="schedule-template" class="collapse">
+          <p>修正可能</p>
+            <textarea class="form-control" rows="5">
+      <%= @room.room_name %>の旅行計画を立てています。
+      予定日時：
+      <% if @room.start_time.present? && @room.end_time.present? %>
+      <%= @room.start_time.strftime("%Y年%m月%d日 %H:%M") %> 〜 <%= @room.end_time.strftime("%Y年%m月%d日 %H:%M") %>
+      <% end %>
+      テーマ:
+      移動手段:
+      同行者:
+
+
+      以下の行きたい場所を基に旅行のプランをテーブル表記で作成してください。
+      <% @locations.each do |location| %>
+      ・<%= location.title %>
+      <% end %>
+            </textarea>
+          </div>
+        </div>
+
+  <!-- 行きたい場所を探す -->
+  <div class="mb-5">
+    <h4 class="h6">
+      <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#find-places-template" aria-expanded="false" aria-controls="find-places-template">
+        行きたい場所を探す >>
+      </button>
+    </h4>
+    <div id="find-places-template" class="collapse">
+    <div class="mt-4">
+  <h3>旅行プランプロンプト作成フォーム</h3>
+  <form id="travel-plan-form">
+    <!-- 行き先 -->
+    <div class="mb-3">
+      <label for="destinations" class="form-label">エリア (旅行エリアを入力してください)</label>
+      <textarea id="destinations" class="form-control" rows="3" placeholder="例: 東京都、渋谷、原宿"></textarea>
+    </div>
+
+    <!-- 1. 旅行の目的 -->
+    <div class="mb-3">
+      <label class="form-label">1. 旅行の目的 (複数選択可能)</label>
+      <div>
+        <% ["観光", "リラクゼーション", "アクティビティ（ハイキング、ダイビングなど）", "グルメ", "文化体験"].each do |purpose| %>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="purpose-<%= purpose %>" value="<%= purpose %>" name="purpose">
+            <label class="form-check-label" for="purpose-<%= purpose %>"><%= purpose %></label>
+          </div>
+        <% end %>
+        <input type="text" id="other-purpose" class="form-control mt-2" placeholder="その他 (入力してください)">
+      </div>
+    </div>
+
+    <!-- 2. 旅行の期間 -->
+    <div class="mb-3">
+      <label for="travel-period" class="form-label">2. 旅行の期間</label>
+      <div class="d-flex gap-2">
+        <input type="date" id="start-date" class="form-control" placeholder="開始日">
+        <input type="date" id="end-date" class="form-control" placeholder="終了日">
+      </div>
+    </div>
+
+    <!-- 3. ご同行者 -->
+    <div class="mb-3">
+      <label for="companions" class="form-label">3. ご同行者</label>
+      <textarea id="companions" class="form-control" rows="3" placeholder="例: 大人：2人, 子供：1人"></textarea>
+    </div>
+
+    <!-- 4. 予算 -->
+    <div class="mb-3">
+      <label for="budget" class="form-label">4. 予算</label>
+      <textarea id="budget" class="form-control" rows="2" placeholder="例: 1人当たり10万円以内"></textarea>
+    </div>
+
+    <!-- 5. 旅行のスタイル -->
+    <div class="mb-3">
+      <label class="form-label">5. 旅行のスタイル</label>
+      <% ["高級ホテルやリゾート地でゆったり過ごしたい", "コストを抑えたカジュアルな旅行", "現地の文化を体験できるローカルな滞在", "都市観光と自然探訪のバランスを取りたい"].each do |style| %>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="style-<%= style %>" value="<%= style %>" name="style">
+          <label class="form-check-label" for="style-<%= style %>"><%= style %></label>
         </div>
       <% end %>
+      <!-- その他の入力 -->
+      <input type="text" id="other-style" class="form-control mt-2" placeholder="その他 (入力してください)">
+    </div>
+
+
+    <!-- 6. 移動手段 -->
+    <div class="mb-3">
+      <label for="transportation" class="form-label">6.移動手段</label>
+      <input type="text" id="transportation" class="form-control" placeholder="例: 車, バス・電車, タクシー">
+    </div>
+
+    <!-- 7. 特別なリクエスト -->
+    <div class="mb-3">
+      <label for="special-requests" class="form-label">7. その他リクエスト</label>
+      <textarea id="special-requests" class="form-control" rows="4" placeholder="例: 1日目はアクティビティ重視、2日目は文化体験など"></textarea>
+    </div>
+
+    <!-- 作成ボタン -->
+    <button type="button" id="generate-prompt" class="btn btn-primary">作成</button>
+  </form>
+
+  <!-- 生成されたプロンプト表示 -->
+  <h4 class="mt-4">生成されたプロンプト</h4>
+  <p>コピーして送信してください</p>
+  <textarea id="generated-prompt" class="form-control" rows="8"></textarea>
+</div>
     </div>
   </div>
-</div>
+      </div>
+    </div>
+  </div>
+  </div>
 
-<!-- フォーム送信後にメッセージフィールドをクリアするためのスクリプト -->
-<script>
-  document.addEventListener('turbo:submit-end', function(event) {
-    if (event.target.id === 'chat-form') {
-      document.getElementById('message_field').value = '';
-    }
-  });
-</script>
-
+  <!-- フォーム送信後にメッセージフィールドをクリアするためのスクリプト -->
+  <script>
+    document.addEventListener('turbo:submit-end', function(event) {
+      if (event.target.id === 'chat-form') {
+        document.getElementById('message_field').value = '';
+      }
+    });
+  </script>
 
   <div class="my-5">
     <%= link_to "もどる", root_path, class: "btn btn-secondary" %>

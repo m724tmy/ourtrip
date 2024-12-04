@@ -30,7 +30,7 @@ class RoomsController < ApplicationController
   def update
     room = Room.find(params[:id])
     room.update(room_params)
-    redirect_to root_path
+    redirect_to room_path(room)
   end
 
   def leave
