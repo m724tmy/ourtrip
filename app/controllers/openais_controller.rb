@@ -23,8 +23,18 @@ class OpenaisController < ApplicationController
   end
 
   def chat_history_for_room
-    @room.chat_histories.select(:role, :content).map do |history|
+    # システムメッセージを追加
+    system_message = {
+      role: "system",
+      content: "あなたは旅行プランのエキスパートです。ユーザーが提供する情報を基に、最適な旅行プランやアドバイスを生成してください。"
+    }
+  
+    # ユーザーとAIの履歴を取得
+    user_and_ai_messages = @room.chat_histories.select(:role, :content).map do |history|
       { role: history.role, content: history.content }
     end
-  end
+  
+    # システムメッセージを履歴の先頭に追加
+    [system_message] + user_and_ai_messages
+  end  
 end
