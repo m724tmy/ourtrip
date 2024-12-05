@@ -18,8 +18,8 @@ class RoomsController < ApplicationController
 
   def show 
     @room = Room.find(params[:id])
-    @schedules = @room.schedules
-    @locations = @room.locations
+    @schedules = @room.schedules.order(:start_time) # スケジュールを開始日時順に並び替え
+    @locations = @room.locations.order(:start_time)
     @chat_history = @room.chat_histories.order(:created_at)
   end
 
