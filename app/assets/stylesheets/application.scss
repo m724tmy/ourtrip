@@ -18,3 +18,9 @@ th {
   background-color: #f4f4f4;
   font-weight: bold;
 }
+
+.form-control {
+  overflow: hidden;
+  resize: none;
+  transition: height 0.2s ease;
+}

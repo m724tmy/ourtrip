@@ -1,73 +1,69 @@
+// adjustHeight 関数をグローバルスコープに定義
+const adjustHeight = (element) => {
+  element.style.height = 'auto';
+  element.style.height = `${element.scrollHeight}px`;
+};
+
+document.getElementById('generate-schedule').addEventListener('click', () => {
+  const date = document.getElementById('schedule-date').value;
+  const transport = Array.from(
+    document.querySelectorAll('#schedule-form input[type=checkbox]:checked')
+  )
+    .map((cb) => cb.value)
+    .join(', ');
+  const requests = document.getElementById('schedule-requests').value;
+  const people =
+    document.querySelector('#schedule-form input[name=schedule-people]:checked')
+      ?.value || document.getElementById('schedule-people-other').value;
+  const locations = document.getElementById('locations-data').value.trim();
+
+  const prompt = `旅行計画を作成しています。以下の情報を基に旅行プランのスケジュール作成をしてください。作成するスケジュールは見やすいようにテーブル形式でお願いします。\n
+  【テーブルカラム】\n・時間:各アクティビティの開始時間\n・場所: 訪れる場所や観光地\n・移動方法:各地点間の移動手段\n・詳細:アクティビティ内容やその場所についての簡単な説明\n
+  【必要情報】\n・行きたい場所・エリア:\n${locations}\n・日にち: ${date}\n・移動手段: ${transport}\n・人数: ${people}\n・その他希望リクエスト: ${requests}`;
+
+  const chatTextarea = document.querySelector('#chat-form textarea');
+  if (chatTextarea) {
+    chatTextarea.value = prompt;
+
+    // 高さを調整
+    adjustHeight(chatTextarea);
+  }
+});
+
+document.getElementById('generate-places').addEventListener('click', () => {
+  const date = document.getElementById('places-date').value;
+  const budget = document.getElementById('places-budget').value;
+  const transport = Array.from(
+    document.querySelectorAll('#find-places-form input[type=checkbox]:checked')
+  )
+    .map((cb) => cb.value)
+    .join(', ');
+  const requests = document.getElementById('places-requests').value;
+  const people =
+    document.querySelector(
+      '#find-places-form input[name=location-people]:checked'
+    )?.value || document.getElementById('location-people-other').value;
+  const locations = document.getElementById('places-location').value.trim();
+
+  const prompt = `旅行計画を作成しています。以下の情報を基に行きたい場所。わたしにぴったりの近くのおすすめスポットを教えてください。提案するスポットは見やすいようにテーブル形式でお願いします。\n
+  【テーブルカラム】\n・場所:おすすめの観光地やスポット名\n・移動方法:各スポットまでの移動手段\n・詳細:各スポットの特徴や簡単な説明\n・掛かる費用（目安）:各スポットでの概算費用（入場料や交通費など）\n
+  【必要情報】\n・行きたい場所・エリア:\n${locations}\n・日にち: ${date}\n・移動手段: ${transport}\n・人数: ${people}\n予算: ${budget}\n・その他希望リクエスト: ${requests}`;
+
+  const chatTextarea = document.querySelector('#chat-form textarea');
+  if (chatTextarea) {
+    chatTextarea.value = prompt;
+
+    // 高さを調整
+    adjustHeight(chatTextarea);
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('travel-plan-form');
-  const generateButton = document.getElementById('generate-prompt');
-  const generatedPrompt = document.getElementById('generated-prompt');
+  const textarea = document.getElementById('autoResize');
 
-  generateButton.addEventListener('click', () => {
-    // 行き先
-    const destinations = document
-      .getElementById('destinations')
-      .value.split(',')
-      .map((dest) => dest.trim())
-      .filter((dest) => dest)
-      .join('\n・');
-
-    // 1. 旅行の目的
-    const purposes = Array.from(
-      form.querySelectorAll('input[name="purpose"]:checked')
-    )
-      .map((input) => input.value)
-      .join(', ');
-    const otherPurpose = document.getElementById('other-purpose').value.trim();
-    const purposeText = otherPurpose
-      ? `${purposes}, ${otherPurpose}`
-      : purposes;
-
-    // 2. 旅行の期間
-    const startDate = document.getElementById('start-date').value;
-    const endDate = document.getElementById('end-date').value;
-
-    // 3. ご同行者
-    const companions = document.getElementById('companions').value.trim();
-
-    // 4. 予算
-    const budget = document.getElementById('budget').value.trim();
-
-    // 5. 旅行のスタイル
-    const styleElements = form.querySelectorAll('input[name="style"]:checked');
-    const styles = Array.from(styleElements).map((input) => input.value);
-    const otherStyle = document.getElementById('other-style').value.trim();
-    const styleText = otherStyle
-      ? [...styles, otherStyle].join(', ')
-      : styles.join(', ');
-
-    // 6. 交通手段
-    const transportation = document
-      .getElementById('transportation')
-      .value.trim();
-
-    // 7. 特別なリクエスト
-    const specialRequests = document
-      .getElementById('special-requests')
-      .value.trim();
-
-    // プロンプト生成
-    const prompt = `
-旅行プランを立てています。
-行きたい場所:
-${destinations || '未記入'}
-目的: ${purposeText || '未選択'}
-期間: ${startDate || '未設定'} ～ ${endDate || '未設定'}
-同行者: ${companions || '未記入'}
-予算: ${budget || '未記入'}
-スタイル: ${styleText || '未選択'}
-交通手段: ${transportation || '未記入'}
-特別なリクエスト: ${specialRequests || '未記入'}
-
-この情報を基に、最適な旅行プランをテーブル表記で作成してください。
-    `.trim();
-
-    // テキストエリアに表示
-    generatedPrompt.value = prompt;
-  });
+  if (textarea) {
+    textarea.addEventListener('input', () => adjustHeight(textarea));
+    // 初期表示時にも高さを調整
+    adjustHeight(textarea);
+  }
 });
