@@ -4,7 +4,7 @@
       <% @chat_history.each do |message| %>
         <div class="list-group-item d-flex gap-3 p-5">
           <div class="d-flex flex-column w-100">
-            <strong><%= message.role == 'user' ? 'あなた:' : 'ChatGPT:' %></strong>
+            <strong><%= message.role == 'user' ? 'あなた:' : 'OURTRIP生成AI:' %></strong>
             <p><%= raw(message.content) %></p>
           </div>
         </div>
