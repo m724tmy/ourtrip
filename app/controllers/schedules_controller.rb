@@ -11,9 +11,9 @@ class SchedulesController < ApplicationController
     def create
         @schedule = @room.schedules.build(schedule_params)
         if @schedule.save
-            redirect_to room_path(@room), notice: "スケジュールを追加しました"
+            redirect_to room_path(@room)
         else
-            render :new, alert: "スケジュールの追加に失敗しました"
+            render :new, notice: "スケジュールの追加に失敗しました"
         end
     end
 
@@ -30,17 +30,17 @@ class SchedulesController < ApplicationController
         params[:schedule][:end_time] = combine_date_and_time(params[:schedule][:end_time], params[:schedule][:end_date])
 
         if @schedule.update(schedule_params)
-            redirect_to room_path(@room), notice: 'スケジュールを更新しました'
+            redirect_to room_path(@room)
         else
-            render :edit, alert: 'スケジュールの更新に失敗しました'
+            render :edit, notice: 'スケジュールの更新に失敗しました'
         end
     end
-
+    
     def destroy
         if @schedule.destroy
-            redirect_to room_path(@room), notice: 'スケジュールを削除しました'
+            redirect_to room_path(@room)
         else
-            redirect_to room_path(@room), alert: 'スケジュールの削除に失敗しました'
+            redirect_to room_path(@room), notice: 'スケジュールの削除に失敗しました'
         end
     end
 
@@ -58,9 +58,9 @@ class SchedulesController < ApplicationController
         )
     
         if @schedule.save
-          redirect_to room_path(@room), notice: "スケジュールに追加しました"
+          redirect_to room_path(@room)
         else
-          redirect_to room_path(@room), alert: "スケジュールへの追加に失敗しました"
+          redirect_to room_path(@room), notice: "スケジュールへの追加に失敗しました"
         end
       end
     private

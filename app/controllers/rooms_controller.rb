@@ -18,8 +18,8 @@ class RoomsController < ApplicationController
 
   def show 
     @room = Room.find(params[:id])
-    @schedules = @room.schedules.includes(:user).order(:start_time) # スケジュールを開始日時順に並び替え
-    @locations = @room.locations.includes(:user).order(:start_time) # ユーザー情報を含めつつ並び替え
+    @schedules = @room.schedules.includes(:user).order(:start_time)
+    @locations = @room.locations.includes(:user).order(:start_time)
     @chat_history = @room.chat_histories.order(:created_at)
     @participants = @room.users
   end
@@ -40,14 +40,14 @@ class RoomsController < ApplicationController
 
     if room_user
       room_user.destroy
-      if @room.users.empty? # 参加者が0人になったら
+      if @room.users.empty?
         @room.destroy
-        redirect_to rooms_path, notice: "ルームが削除されました"
+        redirect_to rooms_path
       else
-        redirect_to rooms_path, notice: "ルームを退出しました"
+        redirect_to rooms_path
       end
     else
-      redirect_to rooms_path, alert: "ルーム退出に失敗しました"
+      redirect_to rooms_path, notice: "ルーム退出に失敗しました"
     end
   end
 

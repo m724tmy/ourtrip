@@ -9,9 +9,9 @@ class LocationsController < ApplicationController
     def create
         @location = @room.locations.build(location_params)
         if @location.save
-            redirect_to room_path(@room), notice: "行きたい場所を追加しました"
+            redirect_to room_path(@room)
         else
-            render :new, alert: "行きたい場所の追加に失敗しました"
+            render :new, notice: "行きたい場所の追加に失敗しました"
         end
     end
 
@@ -27,17 +27,17 @@ class LocationsController < ApplicationController
         params[:location][:start_time] = combine_date_and_time(params[:location][:start_time], params[:location][:start_date])
         params[:location][:end_time] = combine_date_and_time(params[:location][:end_time], params[:location][:end_date])
         if @location.update(location_params)
-            redirect_to room_path(@room), notice: '行きたい場所を更新しました'
+            redirect_to room_path(@room)
         else
-            render :edit, alert: '行きたい場所の更新に失敗しました'
+            render :edit, notice: '行きたい場所の更新に失敗しました'
         end
     end
 
     def destroy
         if @location.destroy
-            redirect_to room_path(@room), notice: 'スケジュールを削除しました'
+            redirect_to room_path(@room)
         else
-            redirect_to room_path(@room), alert: 'スケジュールの削除に失敗しました'
+            redirect_to room_path(@room), notice: 'スケジュールの削除に失敗しました'
         end
     end
 
