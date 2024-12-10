@@ -1,13 +1,13 @@
 <header class="masthead mb-auto">
-  <div class="container mt-5">
-      <%= link_to root_path, class: "masthead-brand text-decoration-none" do %>
-        <h1>OURTRIP</h1>
-      <% end %>
-    <div class="d-flex justify-content-between">
+  <div class="container py-3">
+      <h1><%= link_to root_path, class: "masthead-brand text-decoration-none  main-text-color roboto-thin" do %>
+        OUR TRIP
+      <% end %></h1>
+    <div class="d-flex justify-content-between pt-4">
       <div>
-        <h1 class="masthead-brand">
-          <%= link_to @room.room_name, edit_room_path(@room), class: "d-flex align-items-center link-body-emphasis text-decoration-none" %>
-        </h1>
+        <h2 class="masthead-brand">
+          <%= link_to @room.room_name, edit_room_path(@room), class: "d-flex align-items-center link-body-emphasis text-decoration-none d-block text-dark" %>
+        </h2>
         <p class=""></p>
         <% if @room.start_time.present? && @room.end_time.present? %>
           <p><%= @room.start_time.strftime("%Y-%m-%d %H:%M") %> 〜 <%= @room.end_time.strftime("%Y-%m-%d %H:%M") %></p>
@@ -15,32 +15,81 @@
       </div>
 
       <nav class="nav nav-masthead">
-        <%= link_to current_user.nickname, "#", class: "nav-link active" %>
+        <%= link_to current_user.nickname, "#", class: "nav-link my-0 me-2 text-secondary" %>
         <%= button_to '退出', leave_room_path(@room), method: :delete, data: { confirm: "本当に退出しますか？" }, class: "btn btn-danger" %>
       </nav>
     </div>
   </div>
-</header>
-
-<div class="container mt-5">
-  <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
+  <div class="container d-flex flex-column flex-md-row align-items-center pb-3 mb-4">
     <div class="pricing-header p-3 pb-md-4">
       <p class="text-body-secondary">説明文:<br/><%= @room.description %></p>
     </div>
     <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-      <p class="me-3 py-2 link-body-emphasis" href="#">参加者:</p>
-      <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">user1</a>
-      <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">user2</a>
-      <a class="py-2 link-body-emphasis text-decoration-none" href="#">user3</a>
+      <p class="me-3 py-2 link-body-emphasis">参加者:</p>
+      <% @participants.each do |participant| %>
+        <%= link_to participant.nickname, "#", class: "me-3 py-2 link-body-emphasis text-decoration-none" %>
+      <% end %>
     </nav>
   </div>
+</header>
 
+<div class="py-5 schedules_locations_list">
+<div class="container mt-5">
   <div class="row">
     <div class="col-md-6">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
+          <h2 class="h5 mb-0">行きたい場所一覧</h2>
+          <%= link_to "追加", new_room_location_path(@room), class: "btn main-text-color btn-sm" %>
+        </div>
+
+        <div class="card-body p-4">
+          <% if @locations.any? %>
+            <div class="list-group w-100">
+              <% @locations.each do |location| %>
+                <%= link_to room_location_path(location.room, location), class: 'd-flex gap-4 py-3 text-decoration-none' do %>
+                  <div class="list-group-item list-group-item-action d-flex w-100 align-items-center position-relative">
+                    <div class="d-flex flex-column align-items-center me-4">
+                      <%= image_tag 'sample-user-icon.png', alt: 'User Icon', size: '80x80', class: 'rounded-circle mb-2' %>
+                      <p class="d-flex text-center text-muted" style="font-size: 0.9rem;"><%= location.user.nickname %></p>
+                    </div>
+
+                    <div class="d-flex flex-column w-100">
+                      <h6 class="mb-1"><%= location.title %></h6>
+                      <p class="mb-1 opacity-75"><%= location.description %></p>
+                      <% if location.start_time.present? && location.end_time.present? %>
+                        <small class="text-muted d-block mt-1">
+                          <%= location.start_time.strftime("%m月%d日 %H:%M") %> 〜 <%= location.end_time.strftime("%m月%d日 %H:%M") %>
+                        </small>
+                      <% end %>
+                      <small class="text-muted d-block mt-1"><strong>コスト:</strong> <%= location.cost %>円</small>
+                    </div>
+
+                    <%= link_to '編集', edit_room_location_path(location.room, location), class: 'btn btn-outline-secondary btn-sm position-absolute', style: 'bottom: 50px; right: 30px;' %>
+                  </div>
+                <% end %>
+                <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), class: 'my-2 btn btn-outline-secondary', method: :post %>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-muted">行きたい場所がまだありません。</p>
+          <% end %>
+        </div>
+
+        <%= link_to new_room_location_path(@room), class: "text-decoration-none" do %>
+          <div class="border-primary text-center">
+            <div class="d-flex flex-column justify-content-end align-items-end p-4">
+              <%= image_tag 'plus-icon.png', alt: '+', size: '80x80' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
           <h2 class="h5 mb-0">スケジュール一覧</h2>
-          <%= link_to "追加", new_room_schedule_path(@room), class: "btn btn-light btn-sm" %>
+          <%= link_to "追加", new_room_schedule_path(@room), class: "btn main-text-color btn-sm" %>
         </div>
 
     <div class="card-body p-4">
@@ -65,7 +114,7 @@
                   <small class="text-muted d-block mt-1"><strong>コスト:</strong> <%= schedule.cost %>円</small>
                 </div>
 
-                <%= link_to '編集', edit_room_schedule_path(schedule.room, schedule), class: 'btn btn-primary btn-sm position-absolute', style: 'bottom: 50px; right: 30px;' %>
+                <%= link_to '編集', edit_room_schedule_path(schedule.room, schedule), class: 'btn btn-outline-secondary btn-sm position-absolute', style: 'bottom: 50px; right: 30px;' %>
               </div>
             <% end %>
           <% end %>
@@ -85,196 +134,212 @@
       </div>
     </div>
 
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h2 class="h5 mb-0">行きたい場所一覧</h2>
-          <%= link_to "追加", new_room_location_path(@room), class: "btn btn-light btn-sm" %>
-        </div>
 
-        <div class="card-body p-4">
-          <% if @locations.any? %>
-            <div class="list-group w-100">
-              <% @locations.each do |location| %>
-                <%= link_to room_location_path(location.room, location), class: 'd-flex gap-4 py-3 text-decoration-none' do %>
-                  <div class="list-group-item list-group-item-action d-flex w-100 align-items-center position-relative">
-                    <div class="d-flex flex-column align-items-center me-4">
-                      <%= image_tag 'sample-user-icon.png', alt: 'User Icon', size: '80x80', class: 'rounded-circle mb-2' %>
-                      <p class="d-flex text-center text-muted" style="font-size: 0.9rem;">ユーザー名</p>
-                    </div>
-
-                    <div class="d-flex flex-column w-100">
-                      <h6 class="mb-1"><%= location.title %></h6>
-                      <p class="mb-1 opacity-75"><%= location.description %></p>
-                      <% if location.start_time.present? && location.end_time.present? %>
-                        <small class="text-muted d-block mt-1">
-                          <%= location.start_time.strftime("%m月%d日 %H:%M") %> 〜 <%= location.end_time.strftime("%m月%d日 %H:%M") %>
-                        </small>
-                      <% end %>
-                      <small class="text-muted d-block mt-1"><strong>コスト:</strong> <%= location.cost %>円</small>
-                    </div>
-
-                    <%= link_to '編集', edit_room_location_path(location.room, location), class: 'btn btn-primary btn-sm position-absolute', style: 'bottom: 50px; right: 30px;' %>
-                  </div>
-                <% end %>
-                <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), class: 'my-2 btn btn-outline-secondary', method: :post %>
-              <% end %>
-            </div>
-          <% else %>
-            <p class="text-muted">行きたい場所がまだありません。</p>
-          <% end %>
-        </div>
-
-        <%= link_to new_room_location_path(@room), class: "text-decoration-none" do %>
-          <div class="border-primary text-center">
-            <div class="d-flex flex-column justify-content-end align-items-end p-4">
-              <%= image_tag 'plus-icon.png', alt: '+', size: '80x80' %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
   </div>
 </div>
+</div>
 
+<div class="py-5"></div>
+
+  <div class="text-center bg-main-color text-white py-5">
+  <h2 class="text-center">OUR TRIP 生成AI</h2>
+  <p class="mt-4 fs-5">AIを使って最適なスケジュール作成や、行きたい場所を簡単に見つけよう！<br/>フォームの情報をもとに、最適なスケジュールをご提案します。</p>
+  </div>
+<div class="py-5">
 <div class="container mt-5">
   <div class="row">
     <!-- 左カラム: プロンプトテンプレート一覧 -->
     <div class="col-md-4 border-end">
-      <h3>プロンプトテンプレート一覧</h3>
-
       <!-- スケジュール生成フォーム -->
-      <div class="mb-5">
-        <h4 class="h6">スケジュール生成</h4>
-        <form id="schedule-form">
-          <!-- 日にち -->
-          <div class="mb-3">
-            <label for="location-date" class="form-label">行きたい場所・エリア</label>
-            <textarea id="locations-data" class="form-control" rows="2"><% @locations.each do |location| %>・<%= location.title %><% end %></textarea>
-          </div>
+<!-- 共通のスタイルを適用するためのクラス -->
+<div class="form-template rounded-2 mb-5">
+  <h4 class="main-text-color text-center">スケジュール生成フォーム</h4>
+  
+  <form id="schedule-form">
+    <!-- 行きたい場所・エリア -->
+    <div class="mb-4">
+      <label for="locations-data" class="form-label fw-bold">行きたい場所・エリア</label>
+      <textarea id="locations-data" class="form-control" rows="3">
+<% @locations.each do |location| %>
+・<%= location.title %>
+<% end %>
+      </textarea>
+    </div>
 
-         <!-- 日にち -->
-          <div class="mb-3">
-            <label for="schedule-date" class="form-label">日にち</label>
-            <input type="date" id="schedule-date" class="form-control">
-          </div>
-          
-          <!-- 移動手段 -->
-          <div class="mb-3">
-            <label class="form-label">移動手段</label><br>
-            <input type="checkbox" id="car" value="車・レンタカー"> 車・レンタカー<br>
-            <input type="checkbox" id="public-transport" value="バス・電車などの交通機関"> バス・電車などの交通機関<br>
-          </div>
-          <!-- その他希望のリクエスト -->
-          <div class="mb-3">
-            <label for="schedule-requests" class="form-label">その他希望のリクエスト</label>
-            <textarea id="schedule-requests" class="form-control" rows="2"></textarea>
-          </div>
-          <!-- 人数 -->
-          <div class="mb-3">
-            <label class="form-label">人数</label><br>
-            <input type="radio" name="schedule-people" value="1"> 1
-            <input type="radio" name="schedule-people" value="2"> 2
-            <input type="radio" name="schedule-people" value="3"> 3
-            <input type="radio" name="schedule-people" value="4"> 4
-            その他: <input type="text" id="schedule-people-other" class="form-control d-inline w-auto">
-          </div>
-          <!-- 生成ボタン -->
-          <button type="button" id="generate-schedule" class="btn btn-primary">スケジュール生成</button>
-        </form>
-      </div>
-
-      <!-- 行きたい場所を探すフォーム -->
-      <div class="mb-5">
-        <h4 class="h6">行きたい場所を探す</h4>
-        <form id="find-places-form">
-
-          <!-- 行きたいエリア -->
-          <div class="mb-3">
-            <label for="places-location" class="form-label">行きたい場所・エリア</label>
-            <textarea id="places-location" class="form-control" rows="2"><% @locations.each do |location| %>・<%= location.title %><% end %></textarea>
-          </div>
-
-          <!-- 日にち -->
-          <div class="mb-3">
-            <label for="places-date" class="form-label">日にち</label>
-            <input type="date" id="places-date" class="form-control">
-          </div>
-          <!-- 移動手段 -->
-          <div class="mb-3">
-            <label class="form-label">移動手段</label><br>
-            <input type="checkbox" id="places-car" value="車・レンタカー"> 車・レンタカー<br>
-            <input type="checkbox" id="places-public-transport" value="バス・電車などの交通機関"> バス・電車などの交通機関<br>
-          </div>
-            <!-- 人数 -->
-          <div class="mb-3">
-            <label class="form-label">人数</label><br>
-            <input type="radio" name="location-people" value="1"> 1
-            <input type="radio" name="location-people" value="2"> 2
-            <input type="radio" name="location-people" value="3"> 3
-            <input type="radio" name="location-people" value="4"> 4
-            その他: <input type="text" id="location-people-other" class="form-control d-inline w-auto">
-          </div>
-          <!-- 予算 -->
-          <div class="mb-3">
-            <label for="places-budget" class="form-label">予算</label>
-            <input type="text" id="places-budget" class="form-control">
-          </div>
-          <!-- その他希望のリクエスト -->
-          <div class="mb-3">
-            <label for="places-requests" class="form-label">その他希望のリクエスト</label>
-            <textarea id="places-requests" class="form-control" rows="2"></textarea>
-          </div>
-          <!-- 生成ボタン -->
-          <button type="button" id="generate-places" class="btn btn-primary">行きたい場所を探す</button>
-        </form>
+    <!-- 期間 -->
+    <div class="mb-4">
+      <label class="form-label fw-bold">期間</label>
+      <div class="d-flex gap-2 flex-wrap">
+        <input type="date" id="schedule-start-date" class="form-control" placeholder="開始日">
+        <span class="mx-2">～</span>
+        <input type="date" id="schedule-end-date" class="form-control" placeholder="終了日">
       </div>
     </div>
 
-        <!-- 右カラム: チャット履歴とメッセージ入力フォーム -->
-        <div class="col-md-8">
-          <!-- チャット履歴 -->
-          <div id="chat-history-container" class="mb-3" style="max-height: 600px; overflow-y: auto;">
-            <div id="chat-history">
-              <% if @chat_history.present? %>
-                <div class="list-group">
-                  <% @chat_history.each do |message| %>
-                    <div class="list-group-item d-flex gap-3 p-5">
-                      <div class="d-flex flex-column w-100">
-                        <strong><%= message.role == 'user' ? 'あなた:' : 'OURTRIP生成AI:' %></strong>
-                        <p><%= raw(message.content) %></p>
-                      </div>
-                    </div>
-                  <% end %>
+    <!-- 移動手段 -->
+    <div class="mb-4">
+      <label class="form-label fw-bold">移動手段</label>
+      <div class="d-flex flex-column gap-2">
+        <div class="form-check">
+          <input type="checkbox" id="car" class="form-check-input" value="車・レンタカー">
+          <label for="car" class="form-check-label">車・レンタカー</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="public-transport" class="form-check-input" value="バス・電車などの交通機関">
+          <label for="public-transport" class="form-check-label">バス・電車などの交通機関</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="not-specified" class="form-check-input" value="指定無し">
+          <label for="not-specified" class="form-check-label">指定無し</label>
+        </div>
+        <input type="text" id="schedule-transportation-other" class="form-control mt-2" placeholder="その他(例:1日目のみレンタカー)">
+      </div>
+    </div>
+
+    <!-- 人数 -->
+    <div class="mb-4">
+      <label class="form-label fw-bold">人数</label>
+      <div class="d-flex flex-wrap gap-2">
+        <% [1, 2, 3, 4].each do |num| %>
+          <div class="form-check">
+            <input type="radio" name="schedule-people" id="people-<%= num %>" class="form-check-input" value="<%= num %>">
+            <label for="people-<%= num %>" class="form-check-label"><%= num %></label>
+          </div>
+        <% end %>
+        <input type="text" id="schedule-people-other" class="form-control mt-2" placeholder="その他(例: 大人2人、子供1人)">
+      </div>
+    </div>
+
+    <!-- その他希望のリクエスト -->
+    <div class="mb-4">
+      <label for="schedule-requests" class="form-label fw-bold">その他希望のリクエスト</label>
+      <textarea id="schedule-requests" class="form-control" rows="3" placeholder="（例:静かな環境、グルメツアー希望）"></textarea>
+    </div>
+
+    <!-- 生成ボタン -->
+    <button type="button" id="generate-schedule" class="btn btn-primary w-100">スケジュール生成</button>
+  </form>
+</div>
+
+
+<!-- 行きたい場所を探すフォーム -->
+<div class="my-5 form-template rounded-2">
+  <h4 class="main-text-color text-center">行きたい場所を探す</h4>
+  <form id="find-places-form">
+    
+    <!-- 行きたい場所・エリア -->
+    <div class="my-5">
+      <label for="find-places-location" class="form-label fw-bold">行きたい場所・エリア</label>
+      <textarea id="find-places-location" class="form-control text_height" rows="2">
+<% @locations.each do |location| %>
+　・<%= location.title %>
+<% end %></textarea>
+    </div>
+
+    <!-- 期間 -->
+    <div class="my-3">
+      <label class="form-label fw-bold my-2">期間</label>
+      <div class="d-flex align-items-center gap-2 flex-column">
+        <input type="date" id="find-places-start-date" class="form-control" placeholder="開始日">
+        <span class="mx-1">～</span>
+        <input type="date" id="find-places-end-date" class="form-control" placeholder="終了日">
+      </div>
+    </div>
+
+    <!-- 移動手段 -->
+    <div class="my-3">
+      <label class="form-label fw-bold my-2">移動手段</label>
+      <div>
+        <div class="form-check">
+          <input type="checkbox" id="find-places-car" class="form-check-input" value="車・レンタカー">
+          <label for="find-places-car" class="form-check-label">車・レンタカー</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="find-places-public-transport" class="form-check-input" value="バス・電車などの交通機関">
+          <label for="find-places-public-transport" class="form-check-label">バス・電車などの交通機関</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="find-places-not-specified" class="form-check-input" value="指定無し">
+          <label for="find-places-not-specified" class="form-check-label">指定無し</label>
+        </div>
+        <input type="text" class="form-control mt-2" id="find-places-transportation-other" placeholder="その他(例:1日目のみレンタカー)">
+      </div>
+    </div>
+
+    <!-- 人数 -->
+    <div class="my-3">
+      <label class="form-label fw-bold my-2">人数</label>
+      <div class="d-flex flex-wrap gap-2">
+        <div class="form-check">
+          <input type="radio" name="find-places-people" id="find-places-people-1" class="form-check-input" value="1">
+          <label for="find-places-people-1" class="form-check-label">1</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" name="find-places-people" id="find-places-people-2" class="form-check-input" value="2">
+          <label for="find-places-people-2" class="form-check-label">2</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" name="find-places-people" id="find-places-people-3" class="form-check-input" value="3">
+          <label for="find-places-people-3" class="form-check-label">3</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" name="find-places-people" id="find-places-people-4" class="form-check-input" value="4">
+          <label for="find-places-people-4" class="form-check-label">4</label>
+        </div>
+        <input type="text" id="find-places-people-other" class="form-control mt-2" placeholder="その他(例 : 大人2人、子供1人)">
+      </div>
+    </div>
+
+    <!-- 予算 -->
+    <div class="my-3">
+      <label for="find-places-budget" class="my-2 form-label fw-bold">予算</label>
+      <input type="text" id="find-places-budget" class="form-control" placeholder="例: 5000">
+    </div>
+
+    <!-- その他希望のリクエスト -->
+    <div class="my-3">
+      <label for="find-places-requests" class="my-2 form-label fw-bold">その他希望のリクエスト</label>
+      <textarea id="find-places-requests" class="form-control" rows="2" placeholder="（例：静かな環境、グルメツアー希望）"></textarea>
+    </div>
+
+    <!-- 行きたい場所を探すボタン -->
+    <button type="button" id="generate-places" class="btn btn-primary w-100">行きたい場所を探す</button>
+  </form>
+</div>
+
+    </div>
+
+    <!-- 右カラム: チャット履歴とメッセージ入力フォーム -->
+    <div class="col-md-8">
+      <!-- チャット履歴 -->
+      <div id="chat-history-container" class="mb-3" style="max-height: 600px; overflow-y: auto;">
+        <div id="chat-history">
+          <% if @chat_history.present? %>
+            <div class="list-group">
+              <% @chat_history.each do |message| %>
+                <div class="list-group-item d-flex gap-3 p-3">
+                  <div class="d-flex flex-column w-100">
+                    <strong><%= message.role == 'user' ? 'あなた:' : 'OURTRIP生成AI:' %></strong>
+                    <p><%= raw(message.content) %></p>
+                  </div>
                 </div>
-              <% else %>
-                <p class="text-muted">まだメッセージがありません。</p>
               <% end %>
             </div>
-          </div>
-
-          <!-- メッセージ入力フォーム -->
-          <%= form_with url: chatgpt_room_path(@room), method: :post, local: false, id: "chat-form" do |f| %>
-            <div class="input-group">
-              <%= f.text_area :message, class: "form-control",id: "autoResize", placeholder: "メッセージを入力してください。", rows: 3 %>
-              <button class="btn btn-primary" type="submit">送信</button>
-            </div>
+          <% else %>
+            <p class="text-muted">まだメッセージがありません。</p>
           <% end %>
         </div>
       </div>
+
+      <!-- メッセージ入力フォーム -->
+      <%= form_with url: chatgpt_room_path(@room), method: :post, local: false, id: "chat-form" do |f| %>
+        <div class="input-group">
+          <%= f.text_area :message, class: "form-control", id: "autoResize", placeholder: "メッセージを入力してください。", rows: 3 %>
+          <button class="btn btn-primary" type="submit">送信</button>
+        </div>
+      <% end %>
     </div>
-
-
-  <!-- フォーム送信後にメッセージフィールドをクリアするためのスクリプト -->
-  <script>
-    document.addEventListener('turbo:submit-end', function(event) {
-      if (event.target.id === 'chat-form') {
-        document.getElementById('message_field').value = '';
-      }
-    });
-  </script>
-
-  <div class="my-5">
-    <%= link_to "もどる", root_path, class: "btn btn-secondary" %>
   </div>
+</div>
+</div>
 
