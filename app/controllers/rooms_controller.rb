@@ -10,7 +10,7 @@ class RoomsController < ApplicationController
     @room = Room.new(room_params)
     if @room.save
       RoomUser.create(user: current_user, room: @room)
-      redirect_to rooms_path, notice: "ルームを作成しました"
+      redirect_to room_path(@room)
     else
       render :new, status: :unprocessable_entity
     end
@@ -18,9 +18,10 @@ class RoomsController < ApplicationController
 
   def show 
     @room = Room.find(params[:id])
-    @schedules = @room.schedules.order(:start_time) # スケジュールを開始日時順に並び替え
-    @locations = @room.locations.order(:start_time)
+    @schedules = @room.schedules.includes(:user).order(:start_time) # スケジュールを開始日時順に並び替え
+    @locations = @room.locations.includes(:user).order(:start_time) # ユーザー情報を含めつつ並び替え
     @chat_history = @room.chat_histories.order(:created_at)
+    @participants = @room.users
   end
 
   def edit

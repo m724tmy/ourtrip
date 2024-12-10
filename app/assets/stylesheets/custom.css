@@ -1,6 +1,59 @@
 body {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
   font-optical-sizing: auto;
-  font-weight: weight;
+  font-weight: 400;
   font-style: normal;
+}
+
+.roboto-thin {
+  font-family: 'Roboto', serif;
+  font-weight: 900;
+  font-style: bold;
+}
+
+.roboto-black-italic {
+  font-family: 'Roboto', serif;
+  font-weight: 900;
+  /* font-style: italic; */
+}
+
+.playfair-display {
+  font-family: 'Playfair Display', serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.form-template {
+  background-color: #f6f7fb;
+  padding: 1.5rem;
+}
+
+.bg-main-color {
+  background-color: #007bff;
+  background-size: cover;
+}
+
+.main-text-color {
+  color: #007bff;
+}
+
+.sub-color {
+  color: #14171e;
+}
+
+.second-color {
+  background-color: #ffc107;
+}
+
+.header-logo {
+  font-weight: bold;
+}
+
+.schedules_locations_list {
+  height: 100%;
+}
+
+header {
+  border-bottom: 1px solid #007bff;
 }
