@@ -9,6 +9,8 @@ class SchedulesController < ApplicationController
     end
 
     def create
+        params[:schedule][:start_time] = combine_date_and_time(params[:schedule][:start_time], params[:schedule][:start_date])
+        params[:schedule][:end_time] = combine_date_and_time(params[:schedule][:end_time], params[:schedule][:end_date])
         @schedule = @room.schedules.build(schedule_params)
         if @schedule.save
             redirect_to room_path(@room)

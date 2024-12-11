@@ -16,7 +16,8 @@
 
       <nav class="nav nav-masthead">
         <%= link_to current_user.nickname, "#", class: "nav-link my-0 me-2 text-secondary" %>
-        <%= button_to '退出', leave_room_path(@room), method: :delete, data: { confirm: "本当に退出しますか？" }, class: "btn btn-danger" %>
+        <%= button_to '編集', edit_room_path(@room), method: :get, class: "me-2 btn btn-outline-secondary" %>
+        <%= button_to '退出', leave_room_path(@room), method: :delete, data: { confirm: "本当に退出しますか？" }, class: "btn btn-outline-danger" %>
       </nav>
     </div>
   </div>

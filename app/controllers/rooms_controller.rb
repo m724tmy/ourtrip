@@ -7,6 +7,8 @@ class RoomsController < ApplicationController
   end
 
   def create
+    params[:room][:start_time] = combine_date_and_time(params[:room][:start_time], params[:room][:start_date])
+    params[:room][:end_time] = combine_date_and_time(params[:room][:end_time], params[:room][:end_date])
     @room = Room.new(room_params)
     if @room.save
       RoomUser.create(user: current_user, room: @room)
@@ -29,6 +31,8 @@ class RoomsController < ApplicationController
   end
 
   def update
+    params[:room][:start_time] = combine_date_and_time(params[:room][:start_time], params[:room][:start_date])
+    params[:room][:end_time] = combine_date_and_time(params[:room][:end_time], params[:room][:end_date])
     room = Room.find(params[:id])
     room.update(room_params)
     redirect_to room_path(room)
@@ -55,5 +59,10 @@ class RoomsController < ApplicationController
 
   def room_params
     params.require(:room).permit(:room_name, :description, :start_time, :end_time)
+  end
+
+  def combine_date_and_time(time, date)
+    return if time.blank? || date.blank?
+    "#{date} #{time}".to_datetime
   end
 end

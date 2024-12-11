@@ -7,6 +7,8 @@ class LocationsController < ApplicationController
     end
 
     def create
+        params[:location][:start_time] = combine_date_and_time(params[:location][:start_time], params[:location][:start_date])
+        params[:location][:end_time] = combine_date_and_time(params[:location][:end_time], params[:location][:end_date])
         @location = @room.locations.build(location_params)
         if @location.save
             redirect_to room_path(@room)
