@@ -1,158 +1,157 @@
-# テーブル設計
+# アプリケーション名
 
-## Users テーブル
+**OUR TRIP**
 
-| Column             | Type   | Options                   |
-| ------------------ | ------ | ------------------------- |
-| user_name          | string | null: false               |
-| email              | string | null: false, unique: true |
-| encrypted_password | string | null: false               |
+みんなで作る旅のしおり
 
-### Association
+https://ourtrip.onrender.com/
 
-- has_many :room_users
-- has_many :rooms, through: :room_users
-- has_many :schedules
-- has_many :locations
-- has_many :ratings
-- has_many :comments
+## テスト用アカウント
 
-## Rooms テーブル
+- **Basic 認証 ID**: admin
+- **Basic 認証 Pass**: 0000
 
-| Column      | Type       | Options                        |
-| ----------- | ---------- | ------------------------------ |
-| room_name   | string     | null: false                    |
-| user        | references | null: false, foreign_key: true |
-| description | string     |                                |
-| start_time  | datetime   |                                |
-| end_time    | datetime   |                                |
+### ログインユーザーアカウント
 
-### Association
+- **メールアドレス**: test@test
+- **パスワード**: 000000
 
-- has_many :room_users
-- has_many :users, through: :room_users
-- has_many :schedules
-- has_many :locations
+## アプリケーション概要
 
-## Room_user テーブル
+複数人で旅行の計画を立て、宿泊施設や行きたい場所を整理することができます。
 
-| Column | Type       | Options                        |
-| ------ | ---------- | ------------------------------ |
-| user   | references | null: false, foreign_key: true |
-| room   | references | null: false, foreign_key: true |
+## アプリケーションを作成した背景
 
-### Association
+海外旅行の際に行きたい場所が不明確であったため、スケジュールの調整が難しいことに気づきました。このアプリケーションは、旅行を計画する際に行き先が決まっていない方々が、複数のユーザーと共同でプランを立てやすくすることを目的に開発しました。特に、AI などを使って簡単にスケジュールや場所を管理できるようにすることを目指しています。
+また、周囲に ChatGPT を使ったことがない人が多いことに驚き、そんな方々にも手軽に ChatGPT を活用してもらいたいと感じました。具体的な質問を投げかけると、詳細な回答が得られるという体験を通じて、さらに便利さを実感してもらいたいと考えています。
 
-- belongs_to :room
-- belongs_to :user
+## 利用方法
 
-## Schedules テーブル
+### 1. サインインまたは新規登録を行います。
 
-| Column        | Type       | Options                        |
-| ------------- | ---------- | ------------------------------ |
-| room          | references | null: false, foreign_key: true |
-| user          | references | null: false, foreign_key: true |
-| title         | string     | null: false                    |
-| start_time    | datetime   |                                |
-| end_time      | datetime   |                                |
-| description   | string     |                                |
-| cost          | integer    |                                |
-| reference_url | string     |                                |
-| latitude      | decimal    | precision: 10, scale: 6        |
-| longitude     | decimal    | precision: 10, scale: 6        |
+[![Image from Gyazo](https://i.gyazo.com/530fe89c0c8f246dc5067362beb09335.png)](https://gyazo.com/530fe89c0c8f246dc5067362beb09335)
 
-### Association
+- **メールアドレス**: test@test
+- **パスワード**: 000000
 
-- belongs_to :room
-- belongs_to :user
-- has_many :comments, as: :commentable
-- has_many :schedule_locations, dependent: :destroy
-- has_many :locations, through: :schedule_locations
+### 2. 【しおり作成する】で新しい旅行プランを作成します。
 
-## Locations テーブル
+[![Image from Gyazo](https://i.gyazo.com/3011115066135cb0200e07cf58e36b0b.png)](https://gyazo.com/3011115066135cb0200e07cf58e36b0b)
 
-| Column        | Type       | Options                        |
-| ------------- | ---------- | ------------------------------ |
-| room          | references | null: false, foreign_key: true |
-| user          | references | null: false, foreign_key: true |
-| title         | string     | null: false                    |
-| start_time    | datetime   |                                |
-| end_time      | datetime   |                                |
-| description   | string     |                                |
-| cost          | integer    |                                |
-| reference_url | string     |                                |
-| latitude      | decimal    | precision: 10, scale: 6        |
-| longitude     | decimal    | precision: 10, scale: 6        |
+[![Image from Gyazo](https://i.gyazo.com/231e4101997a77caa353d2a6aff61819.png)](https://gyazo.com/231e4101997a77caa353d2a6aff61819)
 
-### Association
+### 3. 行きたい場所の候補を挙げる
 
-- has_many :comments, as: :commentable
-- belongs_to :room
-- belongs_to :user
-- has_many :tags, through: :location_tags
-- has_many :location_tags
-- has_many :schedule_locations, dependent: :destroy
-- has_many :schedules, through: :schedule_locations
-- has_one :rating
+メンバー同士でそれぞれ行きたい場所の候補を上げて登録していきます
+[![Image from Gyazo](https://i.gyazo.com/678074d3feea44ce8eeeed7739db52fb.png)](https://gyazo.com/678074d3feea44ce8eeeed7739db52fb)
 
-## Schedule_locations テーブル
+### 3-2.ChatGPT を使って行きたい場所やスケジュールを生成
 
-| Column   | Type       | Options                        |
-| -------- | ---------- | ------------------------------ |
-| schedule | references | null: false, foreign_key: true |
-| location | references | null: false, foreign_key: true |
+左側のフォーム内容を入力・作成すると、スケジュールを生成や、行きたい場所を見つけるためのプロンプトの作成ができます。
+[![Image from Gyazo](https://i.gyazo.com/6bce34edddca0d13b4c12c1742b0c8eb.gif)](https://gyazo.com/6bce34edddca0d13b4c12c1742b0c8eb)
 
-### Association
+### 4. 行きたい場所を基に旅行プランを調整しながらスケジュール一覧に追加します。
 
-- belongs_to :schedule
-- belongs_to :location
+[![Image from Gyazo](https://i.gyazo.com/8acfa2ef1c59f730957bf1ab0328bb5c.gif)](https://gyazo.com/8acfa2ef1c59f730957bf1ab0328bb5c)
 
-## Location_tags テーブル
+※直接スケジュール一覧に追加することも可能です。
 
-| Column   | Type       | Options                        |
-| -------- | ---------- | ------------------------------ |
-| location | references | null: false, foreign_key: true |
-| tag      | references | null: false, foreign_key: true |
+[![Image from Gyazo](https://i.gyazo.com/50fc80c5fa7a7ff17edb3e173fe90da0.gif)](https://gyazo.com/50fc80c5fa7a7ff17edb3e173fe90da0)
 
-### Association
+## 機能一覧
 
-- belongs_to :tag
-- belongs_to :location
+### ユーザー管理機能(devise)
 
-## Tags テーブル
+- 新規登録
+- ログイン
+- ログアウト
 
-| Column | Type   | Options                        |
-| ------ | ------ | ------------------------------ |
-| name   | string | null: false, foreign_key: true |
+### ルーム（旅行グループ）作成機能
 
-### Association
+- 複数のユーザーが参加可能な「ルーム」を作成し、共同で旅行計画を立てられます。
+- ルームには名前、説明文、開始日時、終了日時を設定可能。
+- ユーザーはルームから退出可能。退出後、参加者が 0 人となったルームは自動的に削除されます。
 
-- has_many :location_tags
-- has_many :locations through: :location_tags
+### スケジュール作成・管理機能
 
-## Comments テーブル
+- 各ルーム内で旅行スケジュールを作成できます。
+- スケジュールにはタイトル、説明、開始時間、終了時間、予算、参考 URL などを登録可能。
+- スケジュールは開始時間順に表示されます。
 
-| Column           | Type       | Options                        |
-| ---------------- | ---------- | ------------------------------ |
-| user             | references | null: false, foreign_key: true |
-| commentable_type | string     | null: false                    |
-| commentable_id   | integer    | null: false                    |
-| content          | string     | null: false                    |
+### 行きたい場所管理機能
 
-### Association
+- 訪れたい場所を候補として登録できます。
+- 登録したロケーションをスケジュールに追加する機能
+- 開始時間順に表示されます。
 
-- belongs_to :user
-- belongs_to :commentable, polymorphic: true
+### ChatGPT 機能と、プロンプト生成機能
 
-## Ratings テーブル
+- OpenAI の API を活用し、視覚的で分かりやすい旅程案を作成。
+- ユーザーが訪問したい場所や希望条件を入力することで、旅行プランを自動生成するプロンプトテンプレートを提供。
+- 希望日時や訪問場所、移動手段、人数などを入力して旅行計画を立案可能です。
 
-| Column   | Type       | Options                        |
-| -------- | ---------- | ------------------------------ |
-| user     | references | null: false, foreign_key: true |
-| location | references | null: false, foreign_key: true |
-| rating   | integer    |                                |
+## データベース設計
 
-### Association
+[![Image from Gyazo](https://i.gyazo.com/a7ce1a944933fe4d99fe9331c3d51d4e.png)](https://gyazo.com/a7ce1a944933fe4d99fe9331c3d51d4e)
 
-- belongs_to :user
-- belongs_to :location
+## 開発環境
+
+- **フロントエンド:**
+
+  HTML
+
+  CSS
+
+  Javascript
+
+  bootstrap
+
+- **バックエンド:**
+
+  Ruby 3.2.0
+
+  Ruby on rails 7.0.0
+
+- **インフラ:**
+
+  Render.com
+
+- **データーベース:**
+
+  PostgreSQL
+
+## 工夫したポイント
+
+ユーザー視点に立ち、ユーザーが「使いやすい、わかりやすい」と思えるようなシンプルな UI を意識して制作しました
+
+### ユーザー体験のシンプルさ
+
+- レイアウトやボタン配置など、誰でも直感的に作成できるよう配慮しました。旅行計画に不慣れなユーザーにも使っていただきたいです。
+
+### 共同編集
+
+- 旅行の計画は複数人で行うことが多いため、行きたい場所を候補として挙げてスムーズにスケジュールに追加するコンセプト。
+
+### ChatGPT の活用
+
+- プロンプトフォームから生成されたレスポンスを活用し、スケジュールを効率的に作成。
+- 生成されたスケジュールはテーブル形式でわかりやすく表示されます。
+  [![Image from Gyazo](https://i.gyazo.com/690d323cd703bd4ad6ac26ca0ffcc1b7.png)](https://gyazo.com/690d323cd703bd4ad6ac26ca0ffcc1b7)
+
+## 実装予定の機能や処理
+
+- テストコードの作成
+- 旅行プランのカレンダー表示機能
+- 作成した旅行プランを PDF 化
+- ユーザー同士のメッセージ機能
+- 地図上で場所をピンポイントで選択する機能
+- 多機能な検索・フィルター機能
+
+## 改善点
+
+- ユーザーインターフェースが少し堅苦しく感じられるため、よりモダンで直感的なデザインに改良したいです。
+- JavaScript をもっと活用して、しおり作成やスケジュール調整・編集をスムーズに実装できるようにし、ユーザー体験を向上したいです。
+
+## 制作時間
+
+このアプリケーションの制作にかけた時間はおよそ **120 時間** です。
