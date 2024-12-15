@@ -76,8 +76,8 @@
                       <p><strong>コスト:</strong> <%= location.cost %>円</p>
                     </div>
                     <div class="text-end">
-                      <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), method: :post, class: "btn btn-success btn-sm mb-2" %>
-                      <%= link_to '詳細を表示', room_location_path(location.room, location), class: 'btn btn-info btn-sm' %>
+                      <%= button_to 'スケジュールに追加', add_from_location_room_schedules_path(@room, location_id: location.id), method: :post, class: "btn btn-outline-secondary btn-sm mb-2" %>
+                      <%= link_to '詳細を表示', room_location_path(location.room, location), class: 'btn btn-primary btn-sm' %>
                     </div>
                   </div>
                 </li>

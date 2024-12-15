@@ -160,9 +160,9 @@
     <!-- 行きたい場所・エリア -->
     <div class="mb-4">
       <label for="locations-data" class="form-label fw-bold">行きたい場所・エリア</label>
-      <textarea id="locations-data" class="form-control" rows="3">
+      <textarea id="locations-data" class="form-control text_height" rows="3">
 <% @locations.each do |location| %>
-・<%= location.title %>
+　・<%= location.title %>
 <% end %>
       </textarea>
     </div>

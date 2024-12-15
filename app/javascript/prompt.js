@@ -29,18 +29,19 @@ const generatePrompt = (type) => {
     document.querySelector(
       `#${formPrefix}-form input[name=${formPrefix}-people]:checked`
     )?.value || getValue(`${formPrefix}-people-other`);
-  const locations = getValue(`${formPrefix}-location`);
+  const scheduleLocations = getValue('locations-data');
+  const findLocations = getValue('find-places-location');
 
   let prompt;
   if (type === 'schedule') {
     prompt = `旅行計画を作成しています。以下の情報を基に旅行プランのスケジュール作成をしてください。\n
     【テーブルカラム】\n・時間:各アクティビティの開始時間\n・場所: 訪れる場所や観光地\n・移動方法:各地点間の移動手段\n・詳細:アクティビティ内容やその場所についての簡単な説明\n
-    【必要情報】\n・行きたい場所・エリア:\n${locations}\n・日にち: ${start_date}~${end_date}\n・移動手段: ${transport}\n・人数: ${people}\n・その他希望リクエスト: ${requests}`;
+    【必要情報】\n・行きたい場所・エリア:\n${scheduleLocations}\n・日にち: ${start_date}~${end_date}\n・移動手段: ${transport}\n・人数: ${people}\n・その他希望リクエスト: ${requests}`;
   } else {
     const budget = getValue('places-budget');
     prompt = `旅行計画を作成しています。以下の情報を基におすすめスポットを提案してください。\n
     【テーブルカラム】\n・場所:おすすめの観光地やスポット名\n・移動方法:各スポットまでの移動手段\n・詳細:各スポットの特徴や簡単な説明\n・掛かる費用（目安）:各スポットでの概算費用（入場料や交通費など）\n
-    【必要情報】\n・行きたい場所・エリア:\n${locations}\n・日にち: ${start_date}~${end_date}\n・移動手段: ${transport}\n・人数: ${people}\n予算: ${budget}\n・その他希望リクエスト: ${requests}`;
+    【必要情報】\n・行きたい場所・エリア:\n${findLocations}\n・日にち: ${start_date}~${end_date}\n・移動手段: ${transport}\n・人数: ${people}\n予算: ${budget}\n・その他希望リクエスト: ${requests}`;
   }
 
   const chatTextarea = document.querySelector('#chat-form textarea');
