@@ -1,4 +1,5 @@
 class RoomsController < ApplicationController
+  before_action :authenticate_user!, only: [:invite, :index]
   def index
   end
 
@@ -52,6 +53,17 @@ class RoomsController < ApplicationController
       end
     else
       redirect_to rooms_path, notice: "ルーム退出に失敗しました"
+    end
+  end
+
+  def invite
+    @room = Room.find_by(invite_token: params[:id])
+
+    if @room.present?
+      RoomUser.find_or_create_by(user: current_user, room: @room)
+      redirect_to @room, notice: 'ルームに参加しました。'
+    else
+      redirect_to root_path, alert: '無効な招待リンクです。'
     end
   end
 

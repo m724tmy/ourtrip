@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_27_124500) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_18_031814) do
   create_table "chat_histories", charset: "utf8", force: :cascade do |t|
     t.bigint "room_id", null: false
     t.string "role"
@@ -43,6 +43,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_27_124500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_id"], name: "index_room_users_on_room_id"
+    t.index ["user_id", "room_id"], name: "index_room_users_on_user_id_and_room_id", unique: true
     t.index ["user_id"], name: "index_room_users_on_user_id"
   end
 
@@ -53,6 +54,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_27_124500) do
     t.datetime "end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "invite_token"
+    t.index ["invite_token"], name: "index_rooms_on_invite_token", unique: true
   end
 
   create_table "schedule_locations", charset: "utf8", force: :cascade do |t|

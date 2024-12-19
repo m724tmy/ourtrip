@@ -25,12 +25,16 @@
     <div class="pricing-header p-3 pb-md-4">
       <p class="text-body-secondary">説明文:<br/><%= @room.description %></p>
     </div>
-    <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-      <p class="me-3 py-2 link-body-emphasis">参加者:</p>
-      <% @participants.each do |participant| %>
-        <%= link_to participant.nickname, "#", class: "me-3 py-2 link-body-emphasis text-decoration-none" %>
-      <% end %>
-    </nav>
+<nav class="d-flex justify-content-between align-items-center mt-2 mt-md-0 ms-md-auto py-2">
+  <div class="d-flex align-items-center">
+    <p class="me-3 mb-0 link-body-emphasis">参加者:</p>
+    <% @participants.each do |participant| %>
+      <%= link_to participant.nickname, "#", class: "me-3 py-2 link-body-emphasis text-decoration-none" %>
+    <% end %>
+  </div>
+  <button type="button" class="btn btn-outline-secondary" id="copy-link" data-link="<%= invite_room_url(@room.invite_token) %>">招待リンクをコピー</button>
+</nav>
+
   </div>
 </header>
 

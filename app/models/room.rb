@@ -6,4 +6,12 @@ class Room < ApplicationRecord
     has_many :chat_histories, dependent: :destroy
 
     validates :room_name, presence: true
+
+    before_create :generate_invite_token
+
+    private
+
+    def generate_invite_token
+      self.invite_token = SecureRandom.hex(10)
+    end
 end

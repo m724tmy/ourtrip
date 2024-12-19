@@ -12,11 +12,9 @@ Rails.application.routes.draw do
 
     member do
       delete :leave
-    end
-
-    member do
       get 'chatgpt', to: 'openais#index'
       post 'chatgpt', to: 'openais#create'
+      get :invite
     end
   end
 end
