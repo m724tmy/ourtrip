@@ -21,6 +21,10 @@ class RoomsController < ApplicationController
 
   def show 
     @room = Room.find(params[:id])
+    if @room.nil?
+      logger.error "Room not found. Params: #{params.inspect}"
+      redirect_to root_path, alert: "ルームが見つかりませんでした。" and return
+    end
     @schedules = @room.schedules.includes(:user).order(:start_time)
     @locations = @room.locations.includes(:user).order(:start_time)
     @chat_history = @room.chat_histories.order(:created_at)
