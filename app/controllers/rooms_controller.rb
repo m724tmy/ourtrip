@@ -1,5 +1,6 @@
 class RoomsController < ApplicationController
   before_action :authenticate_user!, only: [:invite, :index]
+  before_action :authorize_user, only: [:show]
   def index
   end
 
@@ -21,10 +22,6 @@ class RoomsController < ApplicationController
 
   def show 
     @room = Room.find(params[:id])
-    if @room.nil?
-      logger.error "Room not found. Params: #{params.inspect}"
-      redirect_to root_path, alert: "ルームが見つかりませんでした。" and return
-    end
     @schedules = @room.schedules.includes(:user).order(:start_time)
     @locations = @room.locations.includes(:user).order(:start_time)
     @chat_history = @room.chat_histories.order(:created_at)
@@ -80,5 +77,14 @@ class RoomsController < ApplicationController
   def combine_date_and_time(time, date)
     return if time.blank? || date.blank?
     "#{date} #{time}".to_datetime
+  end
+
+
+  def authorize_user
+    @room = Room.find_by(id: params[:id])
+    if @room.nil? || !@room.users.include?(current_user)
+      flash[:alert] = "このルームにアクセスする権限がありません。"
+      redirect_to root_path
+    end
   end
 end
