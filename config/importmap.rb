@@ -10,3 +10,4 @@ pin "@popperjs/core", to: "https://ga.jspm.io/npm:@popperjs/core@2.11.6/lib/inde
 pin "chat", to: "chat.js"
 pin "prompt", to: "prompt.js"
 pin "copylink", to: "copylink.js"
+pin "set-default-time", to: "set-default-time.js"

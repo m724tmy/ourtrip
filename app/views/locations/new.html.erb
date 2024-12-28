@@ -14,7 +14,7 @@
             <%= f.label :start_time, "開始日時", class: "form-label" %>
             <div class="d-flex">
               <%= date_field_tag 'location[start_date]', @location.start_time.try(:to_date), class: "form-control me-2" %>
-              <%= f.time_field :start_time, value: @location.start_time.try(:strftime, "%H:%M"), class: "form-control" %>
+              <%= f.time_field :start_time, value: @location.start_time.try(:strftime, "%H:%M"), class: "form-control time-input" %>
             </div>
           </div>
 
@@ -22,7 +22,7 @@
             <%= f.label :end_time, "終了日時", class: "form-label" %>
             <div class="d-flex">
               <%= date_field_tag 'location[end_date]', @location.end_time.try(:to_date), class: "form-control me-2" %>
-              <%= f.time_field :end_time, value: @location.end_time.try(:strftime, "%H:%M"), class: "form-control" %>
+              <%= f.time_field :end_time, value: @location.end_time.try(:strftime, "%H:%M"), class: "form-control time-input" %>
             </div>
           </div>
 

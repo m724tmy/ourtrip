@@ -5,3 +5,4 @@ import 'bootstrap';
 import 'chat';
 import 'prompt';
 import 'copylink';
+import 'set-default-time';
