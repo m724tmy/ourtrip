@@ -10,4 +10,5 @@ class User < ApplicationRecord
   has_many :locations
 
   validates :nickname, presence: true
+  validates :password, format: { with: /\A(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+\z/, message: 'には英字と数字の両方を含めてください' }
 end
