@@ -4,7 +4,7 @@
 
 みんなで作る旅のしおり
 
-[OUR TRIP リンク](https://ourtrip.onrender.com/)
+https://ourtrip.onrender.com/
 
 ---
 
